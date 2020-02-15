@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Personne" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="PERSONNE">
+        <id name="idpersonne" type="big_integer">
+            <column name="IDPERSONNE" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="nom" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="NOM"/>
+        </property>
+        <property generated="never" lazy="false" name="datenaissance" optimistic-lock="true" type="date" unique="false">
+            <column length="7" name="DATENAISSANCE"/>
+        </property>
+        <property generated="never" lazy="false" name="lieunaissance" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="LIEUNAISSANCE"/>
+        </property>
+        <property generated="never" lazy="false" name="photo" optimistic-lock="true" type="string" unique="false">
+            <column length="200" name="PHOTO"/>
+        </property>
+        <property generated="never" lazy="false" name="biographie" optimistic-lock="true" type="string" unique="false">
+            <column length="0" name="BIOGRAPHIE"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="realisateurs" optimistic-lock="true" sort="unsorted" table="REALISATEUR">
+            <key on-delete="noaction">
+                <column name="IDPERSONNE" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Realisateur" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="personnages" optimistic-lock="true" sort="unsorted" table="PERSONNAGE">
+            <key on-delete="noaction">
+                <column name="IDPERSONNE" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Personnage" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

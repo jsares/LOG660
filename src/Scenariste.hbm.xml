@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Scenariste" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="SCENARISTE">
+        <id name="idscenariste" type="big_integer">
+            <column name="IDSCENARISTE" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Film" embed-xml="true" fetch="select" insert="true" name="film" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="nom" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="NOM"/>
+        </property>
+    </class>
+</hibernate-mapping>

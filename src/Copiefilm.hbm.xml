@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Copiefilm" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="COPIEFILM">
+        <id name="code" type="big_integer">
+            <column name="CODE" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Film" embed-xml="true" fetch="select" insert="true" name="film" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="eninventaire" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ENINVENTAIRE" not-null="true" precision="1" scale="0"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="locationfilms" optimistic-lock="true" sort="unsorted" table="LOCATIONFILM">
+            <key on-delete="noaction">
+                <column name="CODE" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Locationfilm" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

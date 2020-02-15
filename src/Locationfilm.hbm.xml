@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Locationfilm" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="LOCATIONFILM">
+        <id name="idlocation" type="big_integer">
+            <column name="IDLOCATION" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Client" embed-xml="true" fetch="select" insert="true" name="client" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IDCLIENT" not-null="true" precision="22" scale="0"/>
+        </many-to-one>
+        <many-to-one class="Copiefilm" embed-xml="true" fetch="select" insert="true" name="copiefilm" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="CODE" not-null="true" precision="22" scale="0"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="datelocation" optimistic-lock="true" type="date" unique="false">
+            <column length="7" name="DATELOCATION" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

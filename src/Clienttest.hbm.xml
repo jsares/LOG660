@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Clienttest" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="CLIENTTEST">
+        <composite-id class="ClienttestId" mapped="false" name="id" unsaved-value="undefined">
+            <key-property name="idclient" type="long">
+                <column name="IDCLIENT" precision="10" scale="0"/>
+            </key-property>
+            <key-property name="prenom" type="string">
+                <column length="50" name="PRENOM"/>
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

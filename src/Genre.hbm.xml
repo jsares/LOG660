@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Genre" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="GENRE">
+        <id name="idgenre" type="big_integer">
+            <column name="IDGENRE" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="genre" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="GENRE"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="films" optimistic-lock="true" sort="unsorted" table="FILMGENRE">
+            <key on-delete="noaction">
+                <column name="IDGENRE" not-null="true" precision="22" scale="0"/>
+            </key>
+            <many-to-many embed-xml="true" entity-name="Film" not-found="exception" unique="false">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

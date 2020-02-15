@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Vinfofilm" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="VINFOFILM">
+        <composite-id class="VinfofilmId" mapped="false" name="id" unsaved-value="undefined">
+            <key-property name="titre" type="string">
+                <column length="100" name="TITRE"/>
+            </key-property>
+            <key-property name="anneesortie" type="big_integer">
+                <column name="ANNEESORTIE" precision="22" scale="0"/>
+            </key-property>
+            <key-property name="langueoriginale" type="string">
+                <column length="60" name="LANGUEORIGINALE"/>
+            </key-property>
+            <key-property name="duree" type="big_integer">
+                <column name="DUREE" precision="22" scale="0"/>
+            </key-property>
+            <key-property name="resumescenario" type="string">
+                <column length="1000" name="RESUMESCENARIO"/>
+            </key-property>
+            <key-property name="nom" type="string">
+                <column length="60" name="NOM"/>
+            </key-property>
+            <key-property name="genre" type="string">
+                <column length="60" name="GENRE"/>
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>
