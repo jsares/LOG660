@@ -22,8 +22,5 @@ public class Main {
 		HibernateUtil.shutdown();
 
 		System.out.println("Session terminee");
-		
-		
-		
 	}
 }
