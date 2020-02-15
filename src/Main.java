@@ -4,17 +4,19 @@ import java.util.List;
 
 import org.hibernate.Session; 
 
-public class Demo {
+public class Main {
 	public static void main(String[] args) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
 		session.beginTransaction();
 
 		// l'enonce "FORM Client" est en langage HQL
-		//List<ClientTest> rows = session.createSQLQuery("SELECT * FROM ClientTest").list(); 
+		List<Client> rows = session.createQuery("FROM Client WHERE ROWNUM <= 10").list(); 
 		
-		//ClientTest result = rows.get(0);
-		
+		for(Client client : rows) {
+			System.out.println(client.getNomdefamille());
+		}
+			
 		session.getTransaction().commit();
 		session.close();
 		HibernateUtil.shutdown();

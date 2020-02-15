@@ -17,7 +17,6 @@
         <mapping resource="Realisateur.hbm.xml"/>
         <mapping resource="Personne.hbm.xml"/>
         <mapping resource="Vinfofilm.hbm.xml"/>
-        <mapping resource="Clienttest.hbm.xml"/>
         <mapping resource="Scenariste.hbm.xml"/>
         <mapping resource="Cartecredit.hbm.xml"/>
         <mapping resource="Copiefilm.hbm.xml"/>
