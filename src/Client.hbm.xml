@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Client" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="CLIENT">
+        <id name="idclient" type="big_integer">
+            <column name="IDCLIENT" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Forfait" embed-xml="true" fetch="select" insert="true" name="forfait" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column length="1" name="CODEFORFAIT" not-null="true"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="nomdefamille" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="NOMDEFAMILLE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="prenom" optimistic-lock="true" type="string" unique="false">
+            <column length="20" name="PRENOM" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="courriel" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="COURRIEL" not-null="true" unique="true"/>
+        </property>
+        <property generated="never" lazy="false" name="numerotelephone" optimistic-lock="true" type="string" unique="false">
+            <column length="20" name="NUMEROTELEPHONE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="adresse" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="ADRESSE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="ville" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="VILLE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="province" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="PROVINCE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="codepostal" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="CODEPOSTAL" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="datenaissance" optimistic-lock="true" type="date" unique="false">
+            <column length="7" name="DATENAISSANCE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="motdepasse" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="MOTDEPASSE" not-null="true"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="employes" optimistic-lock="true" sort="unsorted" table="EMPLOYE">
+            <key on-delete="noaction">
+                <column name="IDCLIENT" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Employe" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="locationfilms" optimistic-lock="true" sort="unsorted" table="LOCATIONFILM">
+            <key on-delete="noaction">
+                <column name="IDCLIENT" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Locationfilm" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="cartecredits" optimistic-lock="true" sort="unsorted" table="CARTECREDIT">
+            <key on-delete="noaction">
+                <column name="IDCLIENT" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Cartecredit" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

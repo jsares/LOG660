@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Employe" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="EMPLOYE">
+        <id name="matricule" type="big_integer">
+            <column name="MATRICULE" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Client" embed-xml="true" fetch="select" insert="true" name="client" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IDCLIENT" not-null="true" precision="22" scale="0"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

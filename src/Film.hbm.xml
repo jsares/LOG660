@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Film" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="FILM">
+        <id name="idfilm" type="big_integer">
+            <column name="IDFILM" precision="22" scale="0"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="Realisateur" embed-xml="true" fetch="select" insert="true" name="realisateur" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="IDREALISATEUR" not-null="true" precision="22" scale="0"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="titre" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="TITRE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="anneesortie" optimistic-lock="true" type="big_integer" unique="false">
+            <column name="ANNEESORTIE" precision="22" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="langueoriginale" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="LANGUEORIGINALE"/>
+        </property>
+        <property generated="never" lazy="false" name="duree" optimistic-lock="true" type="big_integer" unique="false">
+            <column name="DUREE" precision="22" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="nbcopiesdispo" optimistic-lock="true" type="big_integer" unique="false">
+            <column name="NBCOPIESDISPO" not-null="true" precision="22" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="resumescenario" optimistic-lock="true" type="string" unique="false">
+            <column length="1000" name="RESUMESCENARIO"/>
+        </property>
+        <property generated="never" lazy="false" name="affiche" optimistic-lock="true" type="string" unique="false">
+            <column length="200" name="AFFICHE"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="false" lazy="true" mutable="true" name="genres" optimistic-lock="true" sort="unsorted" table="FILMGENRE">
+            <key on-delete="noaction">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </key>
+            <many-to-many embed-xml="true" entity-name="Genre" not-found="exception" unique="false">
+                <column name="IDGENRE" not-null="true" precision="22" scale="0"/>
+            </many-to-many>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="personnages" optimistic-lock="true" sort="unsorted" table="PERSONNAGE">
+            <key on-delete="noaction">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Personnage" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="copiefilms" optimistic-lock="true" sort="unsorted" table="COPIEFILM">
+            <key on-delete="noaction">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Copiefilm" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="scenaristes" optimistic-lock="true" sort="unsorted" table="SCENARISTE">
+            <key on-delete="noaction">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Scenariste" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="false" lazy="true" mutable="true" name="paysproductions" optimistic-lock="true" sort="unsorted" table="FILMPAYSPRODUCTION">
+            <key on-delete="noaction">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </key>
+            <many-to-many embed-xml="true" entity-name="Paysproduction" not-found="exception" unique="false">
+                <column name="IDPAYSPRODUCTION" not-null="true" precision="22" scale="0"/>
+            </many-to-many>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="bandeannonces" optimistic-lock="true" sort="unsorted" table="BANDEANNONCE">
+            <key on-delete="noaction">
+                <column name="IDFILM" not-null="true" precision="22" scale="0"/>
+            </key>
+            <one-to-many class="Bandeannonce" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

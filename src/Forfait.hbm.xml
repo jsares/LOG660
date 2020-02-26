@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class dynamic-insert="false" dynamic-update="false" mutable="true" name="Forfait" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="FORFAIT">
+        <id name="codeforfait" type="char">
+            <column length="1" name="CODEFORFAIT"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="nom" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="NOM"/>
+        </property>
+        <property generated="never" lazy="false" name="cout" optimistic-lock="true" type="big_integer" unique="false">
+            <column name="COUT" precision="22" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="locationmax" optimistic-lock="true" type="big_integer" unique="false">
+            <column name="LOCATIONMAX" precision="22" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="dureemax" optimistic-lock="true" type="big_integer" unique="false">
+            <column name="DUREEMAX" precision="22" scale="0"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="clients" optimistic-lock="true" sort="unsorted" table="CLIENT">
+            <key on-delete="noaction">
+                <column length="1" name="CODEFORFAIT" not-null="true"/>
+            </key>
+            <one-to-many class="Client" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>
