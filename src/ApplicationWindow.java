@@ -18,15 +18,18 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
+import javax.swing.JTable;
 
 public class ApplicationWindow {
 
 	private Session session = null;
 	FacadeFilm facade = null;
 	private JFrame frame;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -57,25 +60,59 @@ public class ApplicationWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 962, 545);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
-		JButton btnShowTop10Movies = new JButton("Show top 10 movies");
+		JButton searchBtn = new JButton("Show top 10 movies");
+		searchBtn.setBounds(0, 416, 764, 25);
 		
-		frame.getContentPane().add(btnShowTop10Movies, BorderLayout.SOUTH);
+		frame.getContentPane().add(searchBtn);
 		
 		JPanel panel = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		
-		JTextArea movieTextField = new JTextArea();
-		movieTextField.setColumns(20);
-		panel.add(movieTextField);
+		panel.setBounds(0, 0, 0, 0);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
 		
 		
-		btnShowTop10Movies.addActionListener(new ActionListener() {
+		String columns[]= {"Titre","Annee"};   
+		String data[][]= { 
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+				{"film1","2010"},    
+                {"film2","2001"},   
+                {"film3","1900"}
+		}; 
+		
+		table = new JTable(data, columns);
+		table.setBounds(28, 67, 381, 148);
+              
+	    JScrollPane scroll = new JScrollPane(table);
+	    scroll.setBounds(12, 65, 514, 338);
+	    frame.getContentPane().add(scroll);
+	    
+	    JTextArea movieSearchField = new JTextArea();
+	    movieSearchField.setBounds(122, 27, 265, 25);
+	    frame.getContentPane().add(movieSearchField);
+	    movieSearchField.setColumns(20);
+		
+		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				movieTextField.setText(facade.searchFilm("kIng koNg"));
+				movieSearchField.setText(facade.searchFilm(movieSearchField.getText()));
 			}
 		});
 		

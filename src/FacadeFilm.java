@@ -35,7 +35,10 @@ public class FacadeFilm  {
 	public String searchFilm(String searchTerm) {
 		
 		session.beginTransaction();
-		List<Film> rows = session.createSQLQuery("SELECT * FROM Film WHERE Titre = ?").addEntity(Film.class).setParameter(0, "King Kong").list();
+		List<Film> rows = session.createSQLQuery("SELECT * FROM Film WHERE LOWER(Titre) = ?")
+				.addEntity(Film.class)
+				.setParameter(0, searchTerm.toLowerCase())
+				.list();
 		
 		String text = "";
 		for(Film film : rows) {
