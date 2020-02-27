@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -29,12 +30,20 @@ public class FacadeFilm  {
 	private Session session = null;
 
 	public FacadeFilm() {
+		session = HibernateUtil.getSessionFactory().openSession();
+	}
+
+	public boolean connectClient(String email, String password) {
+		String query = "FROM Client WHERE LOWER(courriel) = :email AND motdepasse = :password";
+		Query q = session.createQuery(query);
+		q.setParameter("email", email.toLowerCase());
+		q.setParameter("password", password);
+		List<Client> client = q.list();//.get(0);
+		return client.size()>=1;
 	}
 	
 	public String searchFilm(String searchTerm) {
-		session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
-		
 		List<Film> rows = session.createQuery("FROM Film WHERE ROWNUM <= 10").list(); 
 		
 		String text = "";
@@ -47,6 +56,10 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 		
 		return text;
-		
+	}
+
+	public static void main(String args[]) {
+		FacadeFilm f = new FacadeFilm();
+		f.connectClient("ArnoldLWixom70@gmail.com", "ahng7Rooh2lo");
 	}
 }
