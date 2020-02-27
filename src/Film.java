@@ -60,6 +60,7 @@ public class Film implements java.io.Serializable {
 		return this.idfilm;
 	}
 
+	
 	public void setIdfilm(BigInteger idfilm) {
 		this.idfilm = idfilm;
 	}

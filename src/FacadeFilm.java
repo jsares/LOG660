@@ -29,13 +29,13 @@ public class FacadeFilm  {
 	private Session session = null;
 
 	public FacadeFilm() {
+		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
 	public String searchFilm(String searchTerm) {
-		session = HibernateUtil.getSessionFactory().openSession();
-		session.beginTransaction();
 		
-		List<Film> rows = session.createQuery("FROM Film WHERE ROWNUM <= 10").list(); 
+		session.beginTransaction();
+		List<Film> rows = session.createSQLQuery("SELECT * FROM Film WHERE Titre = ?").addEntity(Film.class).setParameter(0, "King Kong").list();
 		
 		String text = "";
 		for(Film film : rows) {
