@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 public class ApplicationWindow {
 
 	private Session session = null;
+	FacadeFilm facade = null;
 	private JFrame frame;
 
 	/**
@@ -46,6 +47,7 @@ public class ApplicationWindow {
 	 */
 	public ApplicationWindow() {
 		initialize();
+		facade = new FacadeFilm();
 	}
 
 	/**
@@ -72,20 +74,9 @@ public class ApplicationWindow {
 		
 		btnShowTop10Movies.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				session = HibernateUtil.getSessionFactory().openSession();
-				session.beginTransaction();
 				
-				List<Film> rows = session.createQuery("FROM Film WHERE ROWNUM <= 10").list(); 
-				
-				String text = "";
-				for(Film film : rows) {
-					text += film.getTitre() + "\n";
-				}
-				
-				movieTextField.setText(text);
-				session.getTransaction().commit();
-				session.close();
-				HibernateUtil.shutdown();
+				movieTextField.setText(facade.searchFilm("king kong"));
+
 			}
 		});
 	}
