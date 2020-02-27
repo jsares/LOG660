@@ -43,10 +43,12 @@ public class FacadeFilm  {
 		}
 		
 		session.getTransaction().commit();
-		session.close();
-		HibernateUtil.shutdown();
 		
 		return text;
-		
+	}
+	
+	public void closeSession() {
+		session.close();
+		HibernateUtil.shutdown();
 	}
 }

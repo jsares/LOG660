@@ -13,6 +13,8 @@ import org.hibernate.Session;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -71,13 +73,17 @@ public class ApplicationWindow {
 		panel.add(movieTextField);
 		
 		
-		
 		btnShowTop10Movies.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				movieTextField.setText(facade.searchFilm("king kong"));
-
+				movieTextField.setText(facade.searchFilm("kIng koNg"));
 			}
 		});
+		
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				facade.closeSession();
+			    System.exit(0);
+		}});
 	}
 }
