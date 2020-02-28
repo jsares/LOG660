@@ -81,7 +81,6 @@ public class ApplicationWindow {
 		table = new JTable(model);
 		model.addColumn("Titre");
 		model.addColumn("Annee");
-		model.addColumn("Genre");
 		model.addColumn("Duree");
 		model.addColumn("Langue");
 		model.addRow(facade.getEmptyRow());
@@ -100,9 +99,14 @@ public class ApplicationWindow {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<ArrayList<String>> result = facade.searchFilm(movieSearchField.getText());
 			
+				int rowCount = model.getRowCount();
+				for(int i = rowCount - 1; i >= 0; i--) {
+					model.removeRow(i);
+				}
+				
 				for(int i=0; i<result.size();i++) {
 					ArrayList<String> row = result.get(i);
-					model.addRow(new String[] {row.get(0), row.get(1), row.get(2), row.get(3), row.get(4)});
+					model.addRow(new String[] {row.get(0), row.get(1), row.get(2), row.get(3)});
 				}
 			}
 		});

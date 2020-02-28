@@ -35,6 +35,8 @@ public class FacadeFilm  {
 	
 	public ArrayList<ArrayList<String>> searchFilm(String searchTerm) {
 		
+		
+		
 		session.beginTransaction();
 		Object[][] data = new Object[10][10];
 		ArrayList<ArrayList<String>> rows = new ArrayList<ArrayList<String>>();
@@ -51,7 +53,6 @@ public class FacadeFilm  {
 			ArrayList<String> innerData = new ArrayList<String>();
 			innerData.add(film.getTitre());
 			innerData.add(film.getAnneesortie().toString());
-			innerData.add(film.getGenres().toArray()[0].toString());
 			innerData.add(film.getDuree().toString());
 			innerData.add(film.getLangueoriginale());
 			rows.add(innerData);
@@ -64,7 +65,7 @@ public class FacadeFilm  {
 	
 	public Object[][] getEmptyRow() {
 		return new String[][] { 
-				{"", "", "", "", ""}
+				{"", "", "", ""}
 		};
 	}
 	
