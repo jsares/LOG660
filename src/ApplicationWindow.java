@@ -67,7 +67,7 @@ public class ApplicationWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JButton searchBtn = new JButton("Show top 10 movies");
+		JButton searchBtn = new JButton("Search");
 		searchBtn.setBounds(0, 416, 764, 25);
 		
 		frame.getContentPane().add(searchBtn);

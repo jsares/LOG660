@@ -42,9 +42,9 @@ public class FacadeFilm  {
 		ArrayList<ArrayList<String>> rows = new ArrayList<ArrayList<String>>();
 		
 		List<Film> films = session
-				.createSQLQuery("SELECT * FROM Film WHERE LOWER(Titre) = ?")
+				.createSQLQuery("SELECT * FROM Film WHERE LOWER(Titre) like(?)")
 				.addEntity(Film.class)
-				.setParameter(0, searchTerm.toLowerCase())
+				.setParameter(0, "%"+searchTerm.toLowerCase()+"%")
 				.list();
 		
 		String text = "";
@@ -53,7 +53,7 @@ public class FacadeFilm  {
 			ArrayList<String> innerData = new ArrayList<String>();
 			innerData.add(film.getTitre());
 			innerData.add(film.getAnneesortie().toString());
-			innerData.add(film.getDuree().toString());
+			innerData.add(film.getDuree().toString() + " min");
 			innerData.add(film.getLangueoriginale());
 			rows.add(innerData);
 		}
