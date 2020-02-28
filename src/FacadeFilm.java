@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -32,22 +33,39 @@ public class FacadeFilm  {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
-	public String searchFilm(String searchTerm) {
+	public ArrayList<ArrayList<String>> searchFilm(String searchTerm) {
 		
 		session.beginTransaction();
-		List<Film> rows = session.createSQLQuery("SELECT * FROM Film WHERE LOWER(Titre) = ?")
+		Object[][] data = new Object[10][10];
+		ArrayList<ArrayList<String>> rows = new ArrayList<ArrayList<String>>();
+		
+		List<Film> films = session
+				.createSQLQuery("SELECT * FROM Film WHERE LOWER(Titre) = ?")
 				.addEntity(Film.class)
 				.setParameter(0, searchTerm.toLowerCase())
 				.list();
 		
 		String text = "";
-		for(Film film : rows) {
-			text += film.getTitre() + "\n";
+		int counter = 0;
+		for(Film film : films) {
+			ArrayList<String> innerData = new ArrayList<String>();
+			innerData.add(film.getTitre());
+			innerData.add(film.getAnneesortie().toString());
+			innerData.add(film.getGenres().toArray()[0].toString());
+			innerData.add(film.getDuree().toString());
+			innerData.add(film.getLangueoriginale());
+			rows.add(innerData);
 		}
 		
 		session.getTransaction().commit();
 		
-		return text;
+		return rows;
+	}
+	
+	public Object[][] getEmptyRow() {
+		return new String[][] { 
+				{"", "", "", "", ""}
+		};
 	}
 	
 	public void closeSession() {

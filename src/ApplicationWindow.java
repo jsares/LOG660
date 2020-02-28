@@ -7,6 +7,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.table.DefaultTableModel;
 
 import org.hibernate.Session;
 
@@ -15,6 +16,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -27,9 +29,10 @@ import javax.swing.JTable;
 public class ApplicationWindow {
 
 	private Session session = null;
-	FacadeFilm facade = null;
+	private FacadeFilm facade = null;
 	private JFrame frame;
 	private JTable table;
+	private DefaultTableModel model;
 
 	/**
 	 * Launch the application.
@@ -51,8 +54,8 @@ public class ApplicationWindow {
 	 * Create the application.
 	 */
 	public ApplicationWindow() {
-		initialize();
 		facade = new FacadeFilm();
+		initialize();
 	}
 
 	/**
@@ -74,31 +77,14 @@ public class ApplicationWindow {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		
-		String columns[]= {"Titre","Annee"};   
-		String data[][]= { 
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-				{"film1","2010"},    
-                {"film2","2001"},   
-                {"film3","1900"}
-		}; 
-		
-		table = new JTable(data, columns);
+		model = new DefaultTableModel();
+		table = new JTable(model);
+		model.addColumn("Titre");
+		model.addColumn("Annee");
+		model.addColumn("Genre");
+		model.addColumn("Duree");
+		model.addColumn("Langue");
+		model.addRow(facade.getEmptyRow());
 		table.setBounds(28, 67, 381, 148);
               
 	    JScrollPane scroll = new JScrollPane(table);
@@ -112,7 +98,12 @@ public class ApplicationWindow {
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				movieSearchField.setText(facade.searchFilm(movieSearchField.getText()));
+				ArrayList<ArrayList<String>> result = facade.searchFilm(movieSearchField.getText());
+			
+				for(int i=0; i<result.size();i++) {
+					ArrayList<String> row = result.get(i);
+					model.addRow(new String[] {row.get(0), row.get(1), row.get(2), row.get(3), row.get(4)});
+				}
 			}
 		});
 		
