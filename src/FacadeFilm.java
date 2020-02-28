@@ -33,40 +33,37 @@ public class FacadeFilm  {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
-	public ArrayList<ArrayList<String>> searchFilm(String searchTerm) {
-		
-		
+	public String[] search(String searchTerm) {
+		if(searchTerm.isEmpty()) return this.getEmptyRow();
 		
 		session.beginTransaction();
-		Object[][] data = new Object[10][10];
-		ArrayList<ArrayList<String>> rows = new ArrayList<ArrayList<String>>();
-		
+				
 		List<Film> films = session
 				.createSQLQuery("SELECT * FROM Film WHERE LOWER(Titre) like(?)")
 				.addEntity(Film.class)
 				.setParameter(0, "%"+searchTerm.toLowerCase()+"%")
 				.list();
 		
-		String text = "";
-		int counter = 0;
-		for(Film film : films) {
-			ArrayList<String> innerData = new ArrayList<String>();
-			innerData.add(film.getTitre());
-			innerData.add(film.getAnneesortie().toString());
-			innerData.add(film.getDuree().toString() + " min");
-			innerData.add(film.getLangueoriginale());
-			rows.add(innerData);
-		}
-		
 		session.getTransaction().commit();
 		
-		return rows;
+		if(films.size() == 0) return this.getNoDataFoundMessage();
+		
+		String[] data = new String[films.size()];
+		int counter = 0;
+		for(Film film : films) {
+			data[counter] = film.getTitre() + " (" + film.getAnneesortie().toString() +")";
+			counter++;
+		}
+		
+		return data;
 	}
 	
-	public Object[][] getEmptyRow() {
-		return new String[][] { 
-				{"", "", "", ""}
-		};
+	public String[] getEmptyRow() {
+		return new String[] {" "};
+	}
+	
+	public String[] getNoDataFoundMessage() {
+		return new String[] {"Aucun film ne correspond à votre recherche."};
 	}
 	
 	public void closeSession() {

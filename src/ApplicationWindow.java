@@ -28,11 +28,10 @@ import javax.swing.JTable;
 
 public class ApplicationWindow {
 
-	private Session session = null;
 	private FacadeFilm facade = null;
-	private JFrame frame;
-	private JTable table;
-	private DefaultTableModel model;
+	private JFrame frame = null;
+	private JTable table = null;
+	private DefaultTableModel model = null;
 
 	/**
 	 * Launch the application.
@@ -68,7 +67,7 @@ public class ApplicationWindow {
 		frame.getContentPane().setLayout(null);
 		
 		JButton searchBtn = new JButton("Search");
-		searchBtn.setBounds(0, 416, 764, 25);
+		searchBtn.setBounds(310, 414, 297, 25);
 		
 		frame.getContentPane().add(searchBtn);
 		
@@ -79,34 +78,41 @@ public class ApplicationWindow {
 		
 		model = new DefaultTableModel();
 		table = new JTable(model);
-		model.addColumn("Titre");
-		model.addColumn("Annee");
-		model.addColumn("Duree");
-		model.addColumn("Langue");
+		model.addColumn("Titre (Année)");
+
 		model.addRow(facade.getEmptyRow());
 		table.setBounds(28, 67, 381, 148);
               
 	    JScrollPane scroll = new JScrollPane(table);
-	    scroll.setBounds(12, 65, 514, 338);
+	    scroll.setBounds(311, 65, 297, 338);
 	    frame.getContentPane().add(scroll);
 	    
 	    JTextArea movieSearchField = new JTextArea();
-	    movieSearchField.setBounds(122, 27, 265, 25);
+	    movieSearchField.setBounds(131, 73, 157, 22);
 	    frame.getContentPane().add(movieSearchField);
 	    movieSearchField.setColumns(20);
+	    
+	    JLabel lblTitleSearch = new JLabel("Titre");
+	    lblTitleSearch.setBounds(30, 76, 56, 16);
+	    frame.getContentPane().add(lblTitleSearch);
+	    
+	    JLabel lblSearchBy = new JLabel("Rechercher par");
+	    lblSearchBy.setBounds(88, 24, 200, 16);
+	    frame.getContentPane().add(lblSearchBy);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<ArrayList<String>> result = facade.searchFilm(movieSearchField.getText());
+				String[] result = facade.search(movieSearchField.getText());
 			
+				//Clear data in JTable
 				int rowCount = model.getRowCount();
 				for(int i = rowCount - 1; i >= 0; i--) {
 					model.removeRow(i);
 				}
 				
-				for(int i=0; i<result.size();i++) {
-					ArrayList<String> row = result.get(i);
-					model.addRow(new String[] {row.get(0), row.get(1), row.get(2), row.get(3)});
+				//Add data to JTable
+				for(int i=0; i<result.length;i++) {
+					model.addRow(new String[] {result[i]});
 				}
 			}
 		});
