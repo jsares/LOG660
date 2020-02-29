@@ -127,7 +127,7 @@ public class FacadeFilm  {
 			qryText += "LOWER(personneActeur.nom) LIKE(?)";
 		}
 	
-		Query query = session.createSQLQuery(this.getBaseQuery() + qryText).addEntity(Film.class);
+		Query query = session.createSQLQuery(this.getBaseQuery(countryProd, genre, realisateur, acteur) + qryText).addEntity(Film.class);
 		int counter = 0;
 		
 		if(!title.isEmpty()) {
@@ -172,16 +172,31 @@ public class FacadeFilm  {
 		return query;
 	}
 	
-	private String getBaseQuery() {
-		return "SELECT * FROM Film f" +
-		" JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm " + 
-		" JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction" +
-		" JOIN filmGenre fg ON fg.idfilm = f.idFilm" + 
-		" JOIN genre g ON g.idgenre = fg.idgenre" +
-		" JOIN realisateur r ON r.idrealisateur = f.idrealisateur" + 
-		" JOIN personnage ON personnage.idfilm = f.idfilm" +
-		" JOIN personne personneRealisateur ON personneRealisateur.idpersonne = r.idpersonne" +
-		" JOIN personne personneActeur ON personneActeur.idpersonne = personnage.idpersonne" + 
-		" WHERE ";
+	private String getBaseQuery(String countryProd, String genre, String realisateur, String acteur) {
+		String result = "SELECT * FROM Film f ";
+		
+		if(!countryProd.isEmpty()) {
+			result += "JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm" + 
+					"  JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction";
+		}
+		
+		if(!countryProd.isEmpty()) {
+			result += " JOIN filmGenre fg ON fg.idfilm = f.idFilm" + 
+					"   JOIN genre g ON g.idgenre = fg.idgenre";
+		}
+		
+		result += "   JOIN personnage ON personnage.idfilm = f.idfilm";
+		
+		if(!realisateur.isEmpty()) 
+		{
+			result += " JOIN realisateur r ON r.idrealisateur = f.idrealisateur" +
+			"           JOIN personne personneRealisateur ON personneRealisateur.idpersonne = r.idpersonne";
+		}
+		
+		if(!acteur.isEmpty()) {
+			result += " JOIN personne personneActeur ON personneActeur.idpersonne = personnage.idpersonne";
+		}
+		
+		return result + " WHERE ";
 	}
 }
