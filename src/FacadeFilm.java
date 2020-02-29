@@ -34,14 +34,15 @@ public class FacadeFilm  {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
-	public String[] search(String title, String[] year, String countryProd, String lang) {
+	public String[] search(String title, String[] year, String countryProd, String lang, String genre) {
 		if(title.isEmpty() 
 				&& (year[0].isEmpty() && year[1].isEmpty()) 
 				&& countryProd.isEmpty()
-				&& lang.isEmpty())
+				&& lang.isEmpty()
+				&& genre.isEmpty())
 			return this.getEmptyRow();
 		
-		Query qry = this.buildSearchQuery(title, year, countryProd, lang);
+		Query qry = this.buildSearchQuery(title, year, countryProd, lang, genre);
 		
 		session.beginTransaction();
 
@@ -75,7 +76,7 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 	}
 	
-	private Query buildSearchQuery(String title, String[] year, String countryProd, String lang) {
+	private Query buildSearchQuery(String title, String[] year, String countryProd, String lang, String genre) {
 		
 		String qryText = "";
 		
@@ -105,6 +106,12 @@ public class FacadeFilm  {
 		
 			qryText += "LOWER(LangueOriginale) LIKE(?)";
 		}
+		
+		if(!genre.isEmpty()) {
+			if(!qryText.isEmpty()) qryText += " AND ";
+		
+			qryText += "LOWER(genre) LIKE(?)";
+		}
 	
 		Query query = session.createSQLQuery(this.getBaseQuery() + qryText).addEntity(Film.class);
 		int counter = 0;
@@ -133,12 +140,18 @@ public class FacadeFilm  {
 			query.setParameter(counter, "%"+lang.toLowerCase()+"%");
 		}
 		
+		if(!genre.isEmpty()) {
+			query.setParameter(counter, "%"+genre.toLowerCase()+"%");
+		}
+		
 		return query;
 	}
 	
 	private String getBaseQuery() {
 		return "SELECT * FROM Film f" +
 		" JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm " + 
-		" JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction WHERE ";
+		" JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction" +
+		" JOIN filmGenre fg ON fg.idfilm = f.idFilm" + 
+		" JOIN genre g ON g.idgenre = fg.idgenre WHERE ";
 	}
 }

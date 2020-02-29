@@ -141,6 +141,16 @@ public class ApplicationWindow {
 	    langTextField.setColumns(20);
 	    langTextField.setBounds(131, 216, 157, 22);
 	    frame.getContentPane().add(langTextField);
+	    
+	    JTextArea genreTextField = new JTextArea();
+	    genreTextField.setFont(font);
+	    genreTextField.setColumns(20);
+	    genreTextField.setBounds(131, 267, 157, 22);
+	    frame.getContentPane().add(genreTextField);
+	    
+	    JLabel lblGenre = new JLabel("Genre");
+	    lblGenre.setBounds(30, 273, 100, 16);
+	    frame.getContentPane().add(lblGenre);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -148,7 +158,8 @@ public class ApplicationWindow {
 						movieSearchField.getText(), 
 						new String[] {fromTxtField.getText(), toTxtField.getText()},
 						countryProdtextField.getText(),
-						langTextField.getText()
+						langTextField.getText(),
+						genreTextField.getText()
 				);
 			
 				//Clear data in JTable
