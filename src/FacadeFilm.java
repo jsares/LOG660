@@ -34,15 +34,16 @@ public class FacadeFilm  {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
-	public String[] search(String title, String[] year, String countryProd, String lang, String genre) {
+	public String[] search(String title, String[] year, String countryProd, String lang, String genre, String realisateur) {
 		if(title.isEmpty() 
 				&& (year[0].isEmpty() && year[1].isEmpty()) 
 				&& countryProd.isEmpty()
 				&& lang.isEmpty()
-				&& genre.isEmpty())
+				&& genre.isEmpty()
+				&& realisateur.isEmpty())
 			return this.getEmptyRow();
 		
-		Query qry = this.buildSearchQuery(title, year, countryProd, lang, genre);
+		Query qry = this.buildSearchQuery(title, year, countryProd, lang, genre, realisateur);
 		
 		session.beginTransaction();
 
@@ -76,7 +77,7 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 	}
 	
-	private Query buildSearchQuery(String title, String[] year, String countryProd, String lang, String genre) {
+	private Query buildSearchQuery(String title, String[] year, String countryProd, String lang, String genre, String realisateur) {
 		
 		String qryText = "";
 		
@@ -112,6 +113,12 @@ public class FacadeFilm  {
 		
 			qryText += "LOWER(genre) LIKE(?)";
 		}
+		
+		if(!realisateur.isEmpty()) {
+			if(!qryText.isEmpty()) qryText += " AND ";
+		
+			qryText += "LOWER(personne.nom) LIKE(?)";
+		}
 	
 		Query query = session.createSQLQuery(this.getBaseQuery() + qryText).addEntity(Film.class);
 		int counter = 0;
@@ -138,10 +145,17 @@ public class FacadeFilm  {
 		
 		if(!lang.isEmpty()) {
 			query.setParameter(counter, "%"+lang.toLowerCase()+"%");
+			counter++;
 		}
 		
 		if(!genre.isEmpty()) {
 			query.setParameter(counter, "%"+genre.toLowerCase()+"%");
+			counter++;
+		}
+		
+		if(!realisateur.isEmpty()) {
+			query.setParameter(counter, "%"+realisateur.toLowerCase()+"%");
+			counter++;
 		}
 		
 		return query;
@@ -152,6 +166,8 @@ public class FacadeFilm  {
 		" JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm " + 
 		" JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction" +
 		" JOIN filmGenre fg ON fg.idfilm = f.idFilm" + 
-		" JOIN genre g ON g.idgenre = fg.idgenre WHERE ";
+		" JOIN genre g ON g.idgenre = fg.idgenre" +
+		" JOIN realisateur r ON r.idrealisateur = f.idrealisateur" + 
+		" JOIN personne ON personne.idpersonne = r.idpersonne WHERE ";
 	}
 }
