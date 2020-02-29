@@ -34,10 +34,14 @@ public class FacadeFilm  {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
-	public String[] search(String title, String[] year, String countryProd) {
-		if(title.isEmpty() && (year[0].isEmpty() && year[1].isEmpty()) && countryProd.isEmpty()) return this.getEmptyRow();
+	public String[] search(String title, String[] year, String countryProd, String lang) {
+		if(title.isEmpty() 
+				&& (year[0].isEmpty() && year[1].isEmpty()) 
+				&& countryProd.isEmpty()
+				&& lang.isEmpty())
+			return this.getEmptyRow();
 		
-		Query qry = this.buildSearchQuery(title, year, countryProd);
+		Query qry = this.buildSearchQuery(title, year, countryProd, lang);
 		
 		session.beginTransaction();
 
@@ -71,7 +75,7 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 	}
 	
-	private Query buildSearchQuery(String title, String[] year, String countryProd) {
+	private Query buildSearchQuery(String title, String[] year, String countryProd, String lang) {
 		
 		String qryText = "";
 		
@@ -95,6 +99,12 @@ public class FacadeFilm  {
 			
 			qryText += "LOWER(p.pays) LIKE(?)";
 		}
+		
+		if(!lang.isEmpty()) {
+			if(!qryText.isEmpty()) qryText += " AND ";
+		
+			qryText += "LOWER(LangueOriginale) LIKE(?)";
+		}
 	
 		Query query = session.createSQLQuery(this.getBaseQuery() + qryText).addEntity(Film.class);
 		int counter = 0;
@@ -117,6 +127,10 @@ public class FacadeFilm  {
 		if(!countryProd.isEmpty()) {
 			query.setParameter(counter, "%"+countryProd.toLowerCase()+"%");
 			counter++;
+		}
+		
+		if(!lang.isEmpty()) {
+			query.setParameter(counter, "%"+lang.toLowerCase()+"%");
 		}
 		
 		return query;

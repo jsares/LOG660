@@ -131,13 +131,24 @@ public class ApplicationWindow {
 	    countryProdtextField.setColumns(20);
 	    countryProdtextField.setBounds(131, 166, 157, 22);
 	    frame.getContentPane().add(countryProdtextField);
+	    
+	    JLabel lblLangue = new JLabel("Langue");
+	    lblLangue.setBounds(30, 222, 100, 16);
+	    frame.getContentPane().add(lblLangue);
+	    
+	    JTextArea langTextField = new JTextArea();
+	    langTextField.setFont(font);
+	    langTextField.setColumns(20);
+	    langTextField.setBounds(131, 216, 157, 22);
+	    frame.getContentPane().add(langTextField);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String[] result = facade.search(
 						movieSearchField.getText(), 
 						new String[] {fromTxtField.getText(), toTxtField.getText()},
-						countryProdtextField.getText()
+						countryProdtextField.getText(),
+						langTextField.getText()
 				);
 			
 				//Clear data in JTable
