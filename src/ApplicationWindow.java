@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Rectangle;
 import javax.swing.JTable;
 
@@ -76,6 +77,7 @@ public class ApplicationWindow {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		//Jtable setup
 		model = new DefaultTableModel();
 		table = new JTable(model);
 		model.addColumn("Titre (Année)");
@@ -87,10 +89,14 @@ public class ApplicationWindow {
 	    scroll.setBounds(311, 65, 297, 338);
 	    frame.getContentPane().add(scroll);
 	    
+	    //Search fields
+	    Font font = new Font("SansSerif", Font.PLAIN, 16);
+	    
 	    JTextArea movieSearchField = new JTextArea();
 	    movieSearchField.setBounds(131, 73, 157, 22);
 	    frame.getContentPane().add(movieSearchField);
 	    movieSearchField.setColumns(20);
+	    movieSearchField.setFont(font);
 	    
 	    JLabel lblTitleSearch = new JLabel("Titre");
 	    lblTitleSearch.setBounds(30, 76, 56, 16);
@@ -99,10 +105,29 @@ public class ApplicationWindow {
 	    JLabel lblSearchBy = new JLabel("Rechercher par");
 	    lblSearchBy.setBounds(88, 24, 200, 16);
 	    frame.getContentPane().add(lblSearchBy);
+	    
+	    JLabel lblFrom = new JLabel("Ann\u00E9e");
+	    lblFrom.setBounds(30, 123, 43, 16);
+	    frame.getContentPane().add(lblFrom);
+	    
+	    JTextArea fromTxtField = new JTextArea();
+	    fromTxtField.setFont(font);
+	    fromTxtField.setColumns(20);
+	    fromTxtField.setBounds(131, 117, 56, 22);
+	    frame.getContentPane().add(fromTxtField);
+	    
+	    JTextArea toTxtField = new JTextArea();
+	    toTxtField.setFont(font);
+	    toTxtField.setColumns(20);
+	    toTxtField.setBounds(232, 117, 56, 22);
+	    frame.getContentPane().add(toTxtField);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String[] result = facade.search(movieSearchField.getText());
+				String[] result = facade.search(
+						movieSearchField.getText(), 
+						new String[] {fromTxtField.getText(), toTxtField.getText()}
+				);
 			
 				//Clear data in JTable
 				int rowCount = model.getRowCount();
