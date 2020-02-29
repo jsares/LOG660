@@ -34,10 +34,10 @@ public class FacadeFilm  {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
-	public String[] search(String title, String[] year) {
-		if(title.isEmpty() && year.length == 0) return this.getEmptyRow();
+	public String[] search(String title, String[] year, String countryProd) {
+		if(title.isEmpty() && (year[0].isEmpty() && year[1].isEmpty()) && countryProd.isEmpty()) return this.getEmptyRow();
 		
-		Query qry = this.buildSearchQuery(title, year);
+		Query qry = this.buildSearchQuery(title, year, countryProd);
 		
 		session.beginTransaction();
 
@@ -71,7 +71,7 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 	}
 	
-	private Query buildSearchQuery(String title, String[] year) {
+	private Query buildSearchQuery(String title, String[] year, String countryProd) {
 		
 		String qryText = "";
 		
@@ -89,8 +89,14 @@ public class FacadeFilm  {
 			qryText += "anneesortie BETWEEN ? AND 999999";
 		else if (from == null && to != null)
 			qryText += "anneesortie BETWEEN 0 AND ?";
+		
+		if(!countryProd.isEmpty()) {
+			if(!qryText.isEmpty()) qryText += " AND ";
+			
+			qryText += "LOWER(p.pays) LIKE(?)";
+		}
 	
-		Query query = session.createSQLQuery("SELECT * FROM Film WHERE " + qryText).addEntity(Film.class);
+		Query query = session.createSQLQuery(this.getBaseQuery() + qryText).addEntity(Film.class);
 		int counter = 0;
 		
 		if(!title.isEmpty()) {
@@ -108,6 +114,17 @@ public class FacadeFilm  {
 			counter++;
 		}
 		
+		if(!countryProd.isEmpty()) {
+			query.setParameter(counter, "%"+countryProd.toLowerCase()+"%");
+			counter++;
+		}
+		
 		return query;
+	}
+	
+	private String getBaseQuery() {
+		return "SELECT * FROM Film f" +
+		" JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm " + 
+		" JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction WHERE ";
 	}
 }

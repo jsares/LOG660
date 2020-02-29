@@ -121,12 +121,23 @@ public class ApplicationWindow {
 	    toTxtField.setColumns(20);
 	    toTxtField.setBounds(232, 117, 56, 22);
 	    frame.getContentPane().add(toTxtField);
+	    
+	    JLabel ProdCountryLabel = new JLabel("Pays production");
+	    ProdCountryLabel.setBounds(30, 172, 100, 16);
+	    frame.getContentPane().add(ProdCountryLabel);
+	    
+	    JTextArea countryProdtextField = new JTextArea();
+	    countryProdtextField.setFont(font);
+	    countryProdtextField.setColumns(20);
+	    countryProdtextField.setBounds(131, 166, 157, 22);
+	    frame.getContentPane().add(countryProdtextField);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String[] result = facade.search(
 						movieSearchField.getText(), 
-						new String[] {fromTxtField.getText(), toTxtField.getText()}
+						new String[] {fromTxtField.getText(), toTxtField.getText()},
+						countryProdtextField.getText()
 				);
 			
 				//Clear data in JTable
