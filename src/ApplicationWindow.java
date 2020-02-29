@@ -161,6 +161,16 @@ public class ApplicationWindow {
 	    realisateurTxtField.setColumns(20);
 	    realisateurTxtField.setBounds(131, 314, 157, 22);
 	    frame.getContentPane().add(realisateurTxtField);
+	    
+	    JLabel lblActors = new JLabel("Acteur");
+	    lblActors.setBounds(30, 367, 100, 16);
+	    frame.getContentPane().add(lblActors);
+	    
+	    JTextArea actorsTextField = new JTextArea();
+	    actorsTextField.setFont(font);
+	    actorsTextField.setColumns(20);
+	    actorsTextField.setBounds(131, 364, 157, 22);
+	    frame.getContentPane().add(actorsTextField);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -170,7 +180,8 @@ public class ApplicationWindow {
 						countryProdtextField.getText(),
 						langTextField.getText(),
 						genreTextField.getText(),
-						realisateurTxtField.getText()
+						realisateurTxtField.getText(),
+						actorsTextField.getText()
 				);
 			
 				//Clear data in JTable
