@@ -65,7 +65,7 @@ public class ApplicationWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 962, 545);
+		frame.setBounds(100, 100, 1360, 545);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -90,13 +90,6 @@ public class ApplicationWindow {
 	    JScrollPane scroll = new JScrollPane(table);
 	    scroll.setBounds(311, 65, 297, 338);
 	    frame.getContentPane().add(scroll);
-	    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
-			}
-		});
 	    
 	    //Search fields
 	    Font font = new Font("SansSerif", Font.PLAIN, 16);
@@ -180,6 +173,22 @@ public class ApplicationWindow {
 	    actorsTextField.setColumns(20);
 	    actorsTextField.setBounds(131, 364, 157, 22);
 	    frame.getContentPane().add(actorsTextField);
+	    
+	    JLabel lblTitleDetail = new JLabel("Titre");
+	    lblTitleDetail.setBounds(662, 65, 247, 16);
+	    frame.getContentPane().add(lblTitleDetail);
+	    
+	    JLabel lblYearDetail = new JLabel("Ann\u00E9e");
+	    lblYearDetail.setBounds(662, 94, 209, 16);
+	    frame.getContentPane().add(lblYearDetail);
+	    
+	    JLabel ProdCountryLabelDetail = new JLabel("Pays production");
+	    ProdCountryLabelDetail.setBounds(660, 123, 332, 16);
+	    frame.getContentPane().add(ProdCountryLabelDetail);
+	    
+	    JLabel lblLangueDetail = new JLabel("Langue");
+	    lblLangueDetail.setBounds(662, 152, 191, 16);
+	    frame.getContentPane().add(lblLangueDetail);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -212,5 +221,15 @@ public class ApplicationWindow {
 				facade.closeSession();
 			    System.exit(0);
 		}});
+		
+		 table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
+					
+					SearchItems items = lblTitleDetail.setText(lblTitleDetail.getText() + items.getTitle());
+				}
+			});
 	}
 }
