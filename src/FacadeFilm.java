@@ -110,23 +110,27 @@ public class FacadeFilm  {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
 			qryText += " f.idfilm IN (" + 
-					"SELECT fg.idFIlm FROM filmgenre fg  JOIN genre g ON g.idGenre = fg.idGenre WHERE LOWER(genre) LIKE(:genre)" + 
+					"SELECT fg.idFIlm FROM filmgenre fg JOIN genre g ON g.idGenre = fg.idGenre WHERE LOWER(genre) LIKE(:genre)" + 
 					") ";
 		}
 		
 		if(!searchItems.getRealisateur().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(personneRealisateur.nom) LIKE(:realisateur)";
+			qryText += " f.idrealisateur IN (" + 
+					"SELECT r.idrealisateur FROM personne p JOIN realisateur r ON p.idpersonne = r.idpersonne WHERE LOWER(p.nom) LIKE(:realisateur)" + 
+					") ";
 		}
 		
 		if(!searchItems.getActeur().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(personneActeur.nom) LIKE(:acteur)";
+			qryText += " f.idfilm IN (" + 
+					"SELECT personnage.idfilm FROM personne personneActeur JOIN personnage ON personneActeur.idpersonne = personnage.idpersonne WHERE LOWER(personneActeur.nom) LIKE(:acteur)" + 
+					") ";
 		}
 	
-		Query query = session.createSQLQuery(this.getBaseSearchQuery() + qryText).addEntity(Film.class);
+		Query query = session.createSQLQuery(this.getBaseSearchQuery() + qryText + " ORDER BY f.titre").addEntity(Film.class);
 		
 		if(!searchItems.getTitle().isEmpty())
 			query.setParameter("title", "%"+searchItems.getTitle().toLowerCase()+"%");
@@ -161,19 +165,6 @@ public class FacadeFilm  {
 		if(!searchItems.getCountryProd().isEmpty()) {
 			result += "JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm" + 
 					"  JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction";
-		}
-		
-		if(!searchItems.getRealisateur().isEmpty() || !searchItems.getActeur().isEmpty()) 
-			result += "   JOIN personnage ON personnage.idfilm = f.idfilm";
-		
-		if(!searchItems.getRealisateur().isEmpty()) 
-		{
-			result += " JOIN realisateur r ON r.idrealisateur = f.idrealisateur" +
-			"           JOIN personne personneRealisateur ON personneRealisateur.idpersonne = r.idpersonne";
-		}
-		
-		if(!searchItems.getActeur().isEmpty()) {
-			result += " JOIN personne personneActeur ON personneActeur.idpersonne = personnage.idpersonne";
 		}
 		
 		return result + " WHERE ";
