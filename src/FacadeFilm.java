@@ -29,22 +29,19 @@ import java.awt.Rectangle;
 
 public class FacadeFilm  {
 	private Session session = null;
+	private SearchItems searchItems = null;
 
 	public FacadeFilm() {
 		session = HibernateUtil.getSessionFactory().openSession();
 	}
 	
 	public String[] search(String title, String[] year, String countryProd, String lang, String genre, String realisateur, String acteur) {
-		if(title.isEmpty() 
-				&& (year[0].isEmpty() && year[1].isEmpty()) 
-				&& countryProd.isEmpty()
-				&& lang.isEmpty()
-				&& genre.isEmpty()
-				&& realisateur.isEmpty()
-				&& acteur.isEmpty())
+		searchItems = new SearchItems(title, year, countryProd, lang, genre, realisateur, acteur);
+		
+		if(searchItems.isAllEmpty())
 			return this.getEmptyRow();
 		
-		Query qry = this.buildSearchQuery(title, year, countryProd, lang, genre, realisateur, acteur);
+		Query qry = this.buildSearchQuery();
 		
 		session.beginTransaction();
 
@@ -78,122 +75,107 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 	}
 	
-	private Query buildSearchQuery(String title, String[] year, String countryProd, String lang, String genre, String realisateur, String acteur) {
+	private Query buildSearchQuery() {
 		
 		String qryText = "";
 		
-		if(!title.isEmpty()) qryText += "LOWER(Titre) LIKE(?)";
+		if(!searchItems.getTitle().isEmpty()) qryText += "LOWER(Titre) LIKE(:title)";
 		
-		String from = year[0].isEmpty() ? null : year[0];
-		String to = year[1].isEmpty() ? null : year[1];
+		String from = searchItems.getYear()[0].isEmpty() ? null : searchItems.getYear()[0];
+		String to = searchItems.getYear()[1].isEmpty() ? null : searchItems.getYear()[1];
 		
 		if((from != null || to != null) && !qryText.isEmpty()) 
 			qryText += " AND ";
 		
 		if(from != null && to != null)
-			qryText += "anneesortie BETWEEN ? AND ?";
+			qryText += "anneesortie BETWEEN :from AND :to";
 		else if (from != null && to == null)
-			qryText += "anneesortie BETWEEN ? AND 999999";
+			qryText += "anneesortie BETWEEN :from AND 999999";
 		else if (from == null && to != null)
-			qryText += "anneesortie BETWEEN 0 AND ?";
+			qryText += "anneesortie BETWEEN 0 AND :to";
 		
-		if(!countryProd.isEmpty()) {
+		if(!searchItems.getCountryProd().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 			
-			qryText += "LOWER(p.pays) LIKE(?)";
+			qryText += "LOWER(p.pays) LIKE(:countryProd)";
 		}
 		
-		if(!lang.isEmpty()) {
+		if(!searchItems.getLang().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(LangueOriginale) LIKE(?)";
+			qryText += "LOWER(LangueOriginale) LIKE(:lang)";
 		}
 		
-		if(!genre.isEmpty()) {
+		if(!searchItems.getGenre().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(genre) LIKE(?)";
+			qryText += "LOWER(genre) LIKE(:genre)";
 		}
 		
-		if(!realisateur.isEmpty()) {
+		if(!searchItems.getRealisateur().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(personneRealisateur.nom) LIKE(?)";
+			qryText += "LOWER(personneRealisateur.nom) LIKE(:realisateur)";
 		}
 		
-		if(!acteur.isEmpty()) {
+		if(!searchItems.getActeur().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(personneActeur.nom) LIKE(?)";
+			qryText += "LOWER(personneActeur.nom) LIKE(:acteur)";
 		}
 	
-		Query query = session.createSQLQuery(this.getBaseQuery(countryProd, genre, realisateur, acteur) + qryText).addEntity(Film.class);
-		int counter = 0;
+		Query query = session.createSQLQuery(this.getBaseSearchQuery() + qryText).addEntity(Film.class);
 		
-		if(!title.isEmpty()) {
-			query.setParameter(counter, "%"+title.toLowerCase()+"%");
-			counter++;
-		}
+		if(!searchItems.getTitle().isEmpty())
+			query.setParameter("title", "%"+searchItems.getTitle().toLowerCase()+"%");
 		
-		if(!year[0].isEmpty()) {
-			query.setParameter(counter, year[0]);
-			counter++;
-		}
+		if(!searchItems.getYear()[0].isEmpty())
+			query.setParameter("from", searchItems.getYear()[0]);
 		
-		if(!year[1].isEmpty()) {
-			query.setParameter(counter, year[1]);
-			counter++;
-		}
+		if(!searchItems.getYear()[1].isEmpty())
+			query.setParameter("to", searchItems.getYear()[1]);
+
+		if(!searchItems.getCountryProd().isEmpty())
+			query.setParameter("countryProd", "%"+searchItems.getCountryProd().toLowerCase()+"%");
 		
-		if(!countryProd.isEmpty()) {
-			query.setParameter(counter, "%"+countryProd.toLowerCase()+"%");
-			counter++;
-		}
+		if(!searchItems.getLang().isEmpty())
+			query.setParameter("lang", "%"+searchItems.getLang().toLowerCase()+"%");
 		
-		if(!lang.isEmpty()) {
-			query.setParameter(counter, "%"+lang.toLowerCase()+"%");
-			counter++;
-		}
+		if(!searchItems.getGenre().isEmpty())
+			query.setParameter("genre", "%"+searchItems.getGenre().toLowerCase()+"%");
 		
-		if(!genre.isEmpty()) {
-			query.setParameter(counter, "%"+genre.toLowerCase()+"%");
-			counter++;
-		}
+		if(!searchItems.getRealisateur().isEmpty())
+			query.setParameter("realisateur", "%"+searchItems.getRealisateur().toLowerCase()+"%");
 		
-		if(!realisateur.isEmpty()) {
-			query.setParameter(counter, "%"+realisateur.toLowerCase()+"%");
-			counter++;
-		}
-		
-		if(!acteur.isEmpty()) {
-			query.setParameter(counter, "%"+acteur.toLowerCase()+"%");
-		}
+		if(!searchItems.getActeur().isEmpty())
+			query.setParameter("acteur", "%"+searchItems.getActeur().toLowerCase()+"%");
 		
 		return query;
 	}
 	
-	private String getBaseQuery(String countryProd, String genre, String realisateur, String acteur) {
+	private String getBaseSearchQuery() {
 		String result = "SELECT * FROM Film f ";
 		
-		if(!countryProd.isEmpty()) {
+		if(!searchItems.getCountryProd().isEmpty()) {
 			result += "JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm" + 
 					"  JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction";
 		}
 		
-		if(!countryProd.isEmpty()) {
+		if(!searchItems.getGenre().isEmpty()) {
 			result += " JOIN filmGenre fg ON fg.idfilm = f.idFilm" + 
 					"   JOIN genre g ON g.idgenre = fg.idgenre";
 		}
 		
-		result += "   JOIN personnage ON personnage.idfilm = f.idfilm";
+		if(!searchItems.getRealisateur().isEmpty() || !searchItems.getActeur().isEmpty()) 
+			result += "   JOIN personnage ON personnage.idfilm = f.idfilm";
 		
-		if(!realisateur.isEmpty()) 
+		if(!searchItems.getRealisateur().isEmpty()) 
 		{
 			result += " JOIN realisateur r ON r.idrealisateur = f.idrealisateur" +
 			"           JOIN personne personneRealisateur ON personneRealisateur.idpersonne = r.idpersonne";
 		}
 		
-		if(!acteur.isEmpty()) {
+		if(!searchItems.getActeur().isEmpty()) {
 			result += " JOIN personne personneActeur ON personneActeur.idpersonne = personnage.idpersonne";
 		}
 		
