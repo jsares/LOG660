@@ -226,9 +226,9 @@ public class ApplicationWindow {
 				
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
+					SearchItems items = facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
 					
-					SearchItems items = lblTitleDetail.setText(lblTitleDetail.getText() + items.getTitle());
+					lblTitleDetail.setText(lblTitleDetail.getText() + items.getTitle());
 				}
 			});
 	}

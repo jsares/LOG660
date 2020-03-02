@@ -80,7 +80,7 @@ public class FacadeFilm  {
 		items.setTitle(rowContent.substring(0, rowContent.length()-6).trim());
 		items.setYear(new String[] {rowContent.substring(rowContent.length()-6).trim().substring(1,5)});
 		
-		return new SearchItems();
+		return items;
 	}
 	
 	private Query buildSearchQuery() {
