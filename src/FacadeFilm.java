@@ -109,7 +109,9 @@ public class FacadeFilm  {
 		if(!searchItems.getGenre().isEmpty()) {
 			if(!qryText.isEmpty()) qryText += " AND ";
 		
-			qryText += "LOWER(genre) LIKE(:genre)";
+			qryText += " f.idfilm IN (" + 
+					"SELECT fg.idFIlm FROM filmgenre fg  JOIN genre g ON g.idGenre = fg.idGenre WHERE LOWER(genre) LIKE(:genre)" + 
+					") ";
 		}
 		
 		if(!searchItems.getRealisateur().isEmpty()) {
@@ -159,11 +161,6 @@ public class FacadeFilm  {
 		if(!searchItems.getCountryProd().isEmpty()) {
 			result += "JOIN filmpaysproduction fp ON fp.idFilm = f.idFilm" + 
 					"  JOIN paysProduction p ON p.idPaysProduction = fp.idPaysProduction";
-		}
-		
-		if(!searchItems.getGenre().isEmpty()) {
-			result += " JOIN filmGenre fg ON fg.idfilm = f.idFilm" + 
-					"   JOIN genre g ON g.idgenre = fg.idgenre";
 		}
 		
 		if(!searchItems.getRealisateur().isEmpty() || !searchItems.getActeur().isEmpty()) 
