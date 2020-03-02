@@ -129,7 +129,11 @@ public class FacadeFilm  {
 					"SELECT personnage.idfilm FROM personne personneActeur JOIN personnage ON personneActeur.idpersonne = personnage.idpersonne WHERE LOWER(personneActeur.nom) LIKE(:acteur)" + 
 					") ";
 		}
+		
+		return this.getSearcParams(qryText);		
+	}
 	
+	private Query getSearcParams(String qryText) {
 		Query query = session.createSQLQuery(this.getBaseSearchQuery() + qryText + " ORDER BY f.titre").addEntity(Film.class);
 		
 		if(!searchItems.getTitle().isEmpty())
