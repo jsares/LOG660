@@ -7,6 +7,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.hibernate.Session;
@@ -88,6 +90,13 @@ public class ApplicationWindow {
 	    JScrollPane scroll = new JScrollPane(table);
 	    scroll.setBounds(311, 65, 297, 338);
 	    frame.getContentPane().add(scroll);
+	    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
+			}
+		});
 	    
 	    //Search fields
 	    Font font = new Font("SansSerif", Font.PLAIN, 16);

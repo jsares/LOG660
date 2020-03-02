@@ -75,6 +75,13 @@ public class FacadeFilm  {
 		HibernateUtil.shutdown();
 	}
 	
+	public void handleRowClick(String rowContent) {
+		String title = rowContent.substring(0, rowContent.length()-6).trim();
+		String year = rowContent.substring(rowContent.length()-6).trim().substring(1,5);
+		
+		String a = "";
+	}
+	
 	private Query buildSearchQuery() {
 		
 		String qryText = "";
