@@ -100,10 +100,34 @@ public class FacadeFilm  {
 			Film film = films.get(0);
 			items.setLang(film.getLangueoriginale());
 			
-			Object[] paysArray = film.getPaysproductions().toArray();
-			List<Paysproduction> p =  this.convertSetToList(film.getPaysproductions());
+			String pays = "";
+			List<Paysproduction> paysList =  this.convertSetToList(film.getPaysproductions());
 			
-			String v = "";
+			for(Paysproduction p : paysList) {
+				pays += p.getPays() + ", ";
+			}
+			items.setCountryProd(pays);
+			
+			items.setLength(film.getDuree().toString() + " min");
+			
+			String genre = "";
+			List<Genre> genreList =  this.convertSetToList(film.getGenres());
+			
+			for(Genre g : genreList) {
+				genre += g.getGenre() + ", ";
+			}
+			items.setGenre(genre);
+			
+			String trailers = "";
+			List<Bandeannonce> trailersList =  this.convertSetToList(film.getBandeannonces());
+			
+			for(Bandeannonce b : trailersList) {
+				trailers += b.getLien() + ", ";
+			}
+			items.setTrailers(trailers);
+			
+			items.setRealisateur(film.getRealisateur().getPersonne().getNom());
+			items.setScenarioDescription(film.getResumescenario());
 		}
 		
 		return items;
@@ -208,6 +232,7 @@ public class FacadeFilm  {
 		return result + " WHERE ";
 	}
 	
+	//Source: https://www.geeksforgeeks.org/program-to-convert-set-to-list-in-java/
 	private <T> List<T> convertSetToList(Set<T> set) 
     { 
         // create an empty list 
