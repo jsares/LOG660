@@ -8,6 +8,10 @@ public class SearchItems {
 	private String genre;
 	private String realisateur;
 	private String acteur;
+	private String length;
+	private String scenarioDescription;
+	private String trailers;
+	private String scenariste;
 	
 	public SearchItems() {
 	}
@@ -86,6 +90,39 @@ public class SearchItems {
 
 	public void setActeur(String acteur) {
 		this.acteur = acteur;
+	}
+	
+	public String getLength() {
+		return length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
+	}
+	
+	public String getScenarioDescription() {
+		return scenarioDescription;
+	}
+
+	public void setScenarioDescription(String scenarioDescription) {
+		this.scenarioDescription = scenarioDescription;
+	}
+	
+	public String getTrailers() {
+		return trailers;
+	}
+
+	public void setTrailers(String trailers) {
+		this.trailers = trailers;
+	}
+	
+	
+	public String getScenariste() {
+		return scenariste;
+	}
+
+	public void setScenariste(String scenariste) {
+		this.scenariste = scenariste;
 	}
 
 }

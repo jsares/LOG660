@@ -2,7 +2,6 @@
 
 import java.awt.EventQueue;
 
-import javax.persistence.PersistenceException;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -10,25 +9,20 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 import org.hibernate.Query;
-import org.hibernate.HibernateError;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import javax.persistence.StoredProcedureQuery;
-import javax.persistence.ParameterMode;
 
-import org.hibernate.exception.GenericJDBCException;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.Rectangle;
-import java.math.BigInteger;
+
 
 // default package
 // Generated Feb 15, 2020 2:25:06 PM by Hibernate Tools 5.4.7.Final
@@ -86,6 +80,63 @@ public class FacadeFilm  {
 		SearchItems items = new SearchItems();
 		items.setTitle(rowContent.substring(0, rowContent.length()-6).trim());
 		items.setYear(new String[] {rowContent.substring(rowContent.length()-6).trim().substring(1,5)});
+		
+		String selectQry = "SELECT * FROM film f "
+				+ "WHERE LOWER(titre) = :title AND anneeSortie = :year";
+		
+		Query query = session.createSQLQuery(selectQry).addEntity(Film.class);
+		query.setParameter("title", items.getTitle().toLowerCase());
+		query.setParameter("year", Integer.parseInt(items.getYear()[0]));
+		
+		session.beginTransaction();
+
+		List<Film> films = query.list();
+		
+		session.getTransaction().commit();
+		
+		//Prepare data
+		String[] data = new String[films.size()];
+		if(films.size() > 0) {
+			Film film = films.get(0);
+			items.setLang(film.getLangueoriginale());
+			
+			String pays = "";
+			List<Paysproduction> paysList =  this.convertSetToList(film.getPaysproductions());
+			
+			for(Paysproduction p : paysList) {
+				pays += p.getPays() + ", ";
+			}
+			items.setCountryProd(pays);
+			
+			items.setLength(film.getDuree().toString() + " min");
+			
+			String genre = "";
+			List<Genre> genreList =  this.convertSetToList(film.getGenres());
+			
+			for(Genre g : genreList) {
+				genre += g.getGenre() + ", ";
+			}
+			items.setGenre(genre);
+			
+			String trailers = "";
+			List<Bandeannonce> trailersList =  this.convertSetToList(film.getBandeannonces());
+			
+			for(Bandeannonce b : trailersList) {
+				trailers += b.getLien() + ", ";
+			}
+			items.setTrailers(trailers);
+			
+			String scenariste = "";
+			List<Scenariste> scenaristeList =  this.convertSetToList(film.getScenaristes());
+			
+			for(Scenariste s : scenaristeList) {
+				scenariste += s.getNom() + ", ";
+			}
+			items.setScenariste(scenariste);
+			
+			items.setRealisateur(film.getRealisateur().getPersonne().getNom());
+			items.setScenarioDescription(film.getResumescenario());
+		}
 		
 		return items;
 	}
@@ -188,75 +239,18 @@ public class FacadeFilm  {
 		
 		return result + " WHERE ";
 	}
-
-
-	/**
-	 * Fonction pour effectuer une location de film
-	 * Pour le plugguer au GUI, mettre idClient et idFilm en paramètre de la fonction et afficher les messages d'erreur du switch casedans le GUI
-	 */
-	public void locationFilm(){
-		session.beginTransaction();
-		//Devrons être en paramètres de la fct lors d'integration avec
-		int idClient=55666;
-		int idFilm=107688;
-
-
-		try {
-			Query q = session.createSQLQuery(" { call newlocation(?,?) }");
-			q.setInteger(1,idClient);  // first parameter, index starts with 0
-			q.setInteger(2,idFilm); // secon parameter
-			q.executeUpdate();
-		}catch(PersistenceException e) {
-			if (e.getCause() != null && e.getCause().getCause() != null && e.getCause().getCause() instanceof SQLException) {
-
-				SQLException se = (SQLException) e.getCause().getCause();
-
-				switch (se.getErrorCode()) {
-					case 20001:
-						//Code pour afficher message à l'utilisateur
-						System.out.println("Vous devez avoir 18 ans et plus pour louer un film");
-						break;
-					case 20002:
-						//Code pour afficher message à l'utilisateur
-						System.out.println("Ce film n'est pas en inventaire");
-						break;
-					case 20003:
-						//Code pour afficher message à l'utilisateur
-						System.out.println("Vous avez atteint le nombre maximal de location pour votre forfait");
-						break;
-
-				}
-
-
-			}
-		}
-
-		session.getTransaction().commit();
-		session.close();
-		HibernateUtil.shutdown();
-
-	}
-	//Sert pu à rien mais on le garde au cas
-	public void populerCopieFIlm(){
-		session.beginTransaction();
-
-		String sqlClient = "SELECT * FROM Film";
-		List<Film> rows = session.createSQLQuery(sqlClient).addEntity(Film.class).list();
-		int nextVal;
-		for(int i=0;i<rows.size();i++){
-
-			Copiefilm copie=new Copiefilm(BigInteger.valueOf(i*10+1),rows.get(i),true);
-			session.save(copie);
-			copie=new Copiefilm(BigInteger.valueOf(i*10+2),rows.get(i),true);
-			session.save(copie);
-			copie=new Copiefilm(BigInteger.valueOf(i*10+3),rows.get(i),true);
-			session.save(copie);
-		}
-
-
-		session.getTransaction().commit();
-		session.close();
-		HibernateUtil.shutdown();
-	}
-
+	
+	//Source: https://www.geeksforgeeks.org/program-to-convert-set-to-list-in-java/
+	private <T> List<T> convertSetToList(Set<T> set) 
+    { 
+        // create an empty list 
+        List<T> list = new ArrayList<>(); 
+  
+        // push each element in the set into the list 
+        for (T t : set) 
+            list.add(t); 
+  
+        // return the list 
+        return list; 
+    } 
 }
