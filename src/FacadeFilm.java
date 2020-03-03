@@ -181,4 +181,13 @@ public class FacadeFilm  {
 		
 		return result + " WHERE ";
 	}
+
+	public boolean connectClient(String email, String password) {
+		String query = "FROM Client WHERE LOWER(courriel) = :email AND motdepasse = :password";
+		Query q = session.createQuery(query);
+		q.setParameter("email", email.toLowerCase());
+		q.setParameter("password", password);
+		List<Client> client = q.list();//.get(0);
+		return client.size()>=1;
+	}
 }
