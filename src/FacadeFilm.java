@@ -87,7 +87,6 @@ public class FacadeFilm  {
 		query.setParameter("title", items.getTitle().toLowerCase());
 		query.setParameter("year", Integer.parseInt(items.getYear()[0]));
 		
-		
 		session.beginTransaction();
 
 		List<Film> films = query.list();
@@ -99,8 +98,12 @@ public class FacadeFilm  {
 		if(films.size() > 0) {
 			Film film = films.get(0);
 			items.setLang(film.getLangueoriginale());
+			
+			Object[] paysArray = film.getPaysproductions().toArray();
+			for(Object p: paysArray)
+				Paysproduction pp = (Paysproduction) p;
+				String a = "";
 		}
-		
 		
 		return items;
 	}

@@ -175,20 +175,36 @@ public class ApplicationWindow {
 	    frame.getContentPane().add(actorsTextField);
 	    
 	    JLabel lblTitleDetail = new JLabel("Titre: ");
-	    lblTitleDetail.setBounds(662, 65, 247, 16);
+	    lblTitleDetail.setBounds(662, 65, 43, 16);
 	    frame.getContentPane().add(lblTitleDetail);
 	    
 	    JLabel lblYearDetail = new JLabel("Ann\u00E9e: ");
-	    lblYearDetail.setBounds(662, 94, 209, 16);
+	    lblYearDetail.setBounds(662, 94, 62, 16);
 	    frame.getContentPane().add(lblYearDetail);
 	    
 	    JLabel ProdCountryLabelDetail = new JLabel("Pays production: ");
-	    ProdCountryLabelDetail.setBounds(660, 123, 332, 16);
+	    ProdCountryLabelDetail.setBounds(660, 123, 100, 16);
 	    frame.getContentPane().add(ProdCountryLabelDetail);
 	    
 	    JLabel lblLangueDetail = new JLabel("Langue: ");
-	    lblLangueDetail.setBounds(662, 152, 191, 16);
+	    lblLangueDetail.setBounds(662, 152, 50, 16);
 	    frame.getContentPane().add(lblLangueDetail);
+	    
+	    JLabel lblTitleDetail_1 = new JLabel("");
+	    lblTitleDetail_1.setBounds(703, 65, 247, 16);
+	    frame.getContentPane().add(lblTitleDetail_1);
+	    
+	    JLabel lblYearDetail_1 = new JLabel("");
+	    lblYearDetail_1.setBounds(713, 94, 62, 16);
+	    frame.getContentPane().add(lblYearDetail_1);
+	    
+	    JLabel ProdCountryLabelDetail_1 = new JLabel("");
+	    ProdCountryLabelDetail_1.setBounds(761, 123, 332, 16);
+	    frame.getContentPane().add(ProdCountryLabelDetail_1);
+	    
+	    JLabel lblLangueDetail_1 = new JLabel("");
+	    lblLangueDetail_1.setBounds(725, 152, 50, 16);
+	    frame.getContentPane().add(lblLangueDetail_1);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -228,9 +244,11 @@ public class ApplicationWindow {
 				public void valueChanged(ListSelectionEvent e) {
 					SearchItems items = facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
 					
-					lblTitleDetail.setText(lblTitleDetail.getText() + items.getTitle());
-					lblYearDetail.setText(lblYearDetail.getText() + items.getYear()[0]);
-					lblLangueDetail.setText(lblLangueDetail.getText() + items.getLang());
+					lblTitleDetail_1.setText(items.getTitle());
+					lblYearDetail_1.setText(items.getYear()[0]);
+					lblLangueDetail_1.setText(items.getLang());
+					ProdCountryLabelDetail_1.setText(items.getCountryProd());
+					
 				}
 			});
 	}
