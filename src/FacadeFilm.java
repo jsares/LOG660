@@ -189,24 +189,6 @@ public class FacadeFilm  {
 		return result + " WHERE ";
 	}
 
-	public String searchFilm(String searchTerm) {
-
-		session.beginTransaction();
-
-		List<Film> rows = session.createQuery("FROM Film WHERE ROWNUM <= 10").list();
-
-		String text = "";
-		for(Film film : rows) {
-			text += film.getTitre() + "\n";
-		}
-
-		session.getTransaction().commit();
-		session.close();
-		HibernateUtil.shutdown();
-
-		return text;
-
-	}
 
 	/**
 	 * Fonction pour effectuer une location de film
