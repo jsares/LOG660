@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -100,9 +101,9 @@ public class FacadeFilm  {
 			items.setLang(film.getLangueoriginale());
 			
 			Object[] paysArray = film.getPaysproductions().toArray();
-			for(Object p: paysArray)
-				Paysproduction pp = (Paysproduction) p;
-				String a = "";
+			List<Paysproduction> p =  this.convertSetToList(film.getPaysproductions());
+			
+			String v = "";
 		}
 		
 		return items;
@@ -206,4 +207,17 @@ public class FacadeFilm  {
 		
 		return result + " WHERE ";
 	}
+	
+	private <T> List<T> convertSetToList(Set<T> set) 
+    { 
+        // create an empty list 
+        List<T> list = new ArrayList<>(); 
+  
+        // push each element in the set into the list 
+        for (T t : set) 
+            list.add(t); 
+  
+        // return the list 
+        return list; 
+    } 
 }

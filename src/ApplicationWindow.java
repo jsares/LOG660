@@ -246,8 +246,8 @@ public class ApplicationWindow {
 					
 					lblTitleDetail_1.setText(items.getTitle());
 					lblYearDetail_1.setText(items.getYear()[0]);
-					lblLangueDetail_1.setText(items.getLang());
 					ProdCountryLabelDetail_1.setText(items.getCountryProd());
+					lblLangueDetail_1.setText(items.getLang());
 					
 				}
 			});
