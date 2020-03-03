@@ -11,6 +11,7 @@ public class SearchItems {
 	private String length;
 	private String scenarioDescription;
 	private String trailers;
+	private String scenariste;
 	
 	public SearchItems() {
 	}
@@ -100,7 +101,7 @@ public class SearchItems {
 	}
 	
 	public String getScenarioDescription() {
-		return length;
+		return scenarioDescription;
 	}
 
 	public void setScenarioDescription(String scenarioDescription) {
@@ -113,6 +114,15 @@ public class SearchItems {
 
 	public void setTrailers(String trailers) {
 		this.trailers = trailers;
+	}
+	
+	
+	public String getScenariste() {
+		return scenariste;
+	}
+
+	public void setScenariste(String scenariste) {
+		this.scenariste = scenariste;
 	}
 
 }

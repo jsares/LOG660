@@ -245,6 +245,14 @@ public class ApplicationWindow {
 	    JLabel lblTrailer_1 = new JLabel("");
 	    lblTrailer_1.setBounds(773, 296, 569, 16);
 	    frame.getContentPane().add(lblTrailer_1);
+	    
+	    JLabel lblScenariste = new JLabel("Scenariste(s): ");
+	    lblScenariste.setBounds(660, 320, 100, 16);
+	    frame.getContentPane().add(lblScenariste);
+	    
+	    JLabel lblScenariste_1 = new JLabel("");
+	    lblScenariste_1.setBounds(745, 320, 585, 16);
+	    frame.getContentPane().add(lblScenariste_1);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -293,6 +301,7 @@ public class ApplicationWindow {
 					lblNomRealisateur_1.setText(items.getRealisateur());
 					lblDescription_1.setText(items.getScenarioDescription());
 					lblTrailer_1.setText(items.getTrailers());
+					lblScenariste_1.setText(items.getScenariste());
 				}
 			});
 	}

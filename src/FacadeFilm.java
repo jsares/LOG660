@@ -126,6 +126,14 @@ public class FacadeFilm  {
 			}
 			items.setTrailers(trailers);
 			
+			String scenariste = "";
+			List<Scenariste> scenaristeList =  this.convertSetToList(film.getScenaristes());
+			
+			for(Scenariste s : scenaristeList) {
+				scenariste += s.getNom() + ", ";
+			}
+			items.setScenariste(scenariste);
+			
 			items.setRealisateur(film.getRealisateur().getPersonne().getNom());
 			items.setScenarioDescription(film.getResumescenario());
 		}
