@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 
 public class ApplicationWindow extends JFrame{
     private final CardLayout cl = new CardLayout();
-	JPanel cards = new JPanel(cl);
+	private JPanel cards = new JPanel(cl);
 	private FacadeFilm facade = new FacadeFilm();
 	private JTable table = null;
 	private DefaultTableModel model = null;
@@ -16,7 +16,7 @@ public class ApplicationWindow extends JFrame{
     /**
      * Create the application.
      */
-    public ApplicationWindow() {
+    private ApplicationWindow() {
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
         contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -176,67 +176,67 @@ public class ApplicationWindow extends JFrame{
 
 	    JLabel lblTitleDetail_1 = new JLabel("");
 	    lblTitleDetail_1.setBounds(703, 65, 379, 16);
-	    frame.getContentPane().add(lblTitleDetail_1);
+        panel.add(lblTitleDetail_1);
 
 	    JLabel lblYearDetail_1 = new JLabel("");
 	    lblYearDetail_1.setBounds(713, 94, 62, 16);
-	    frame.getContentPane().add(lblYearDetail_1);
+        panel.add(lblYearDetail_1);
 
 	    JLabel ProdCountryLabelDetail_1 = new JLabel("");
 	    ProdCountryLabelDetail_1.setBounds(761, 123, 332, 16);
-	    frame.getContentPane().add(ProdCountryLabelDetail_1);
+        panel.add(ProdCountryLabelDetail_1);
 
 	    JLabel lblLangueDetail_1 = new JLabel("");
 	    lblLangueDetail_1.setBounds(725, 152, 50, 16);
-	    frame.getContentPane().add(lblLangueDetail_1);
+        panel.add(lblLangueDetail_1);
 
 	    JLabel lblLengthDetail = new JLabel("Dur\u00E9e: ");
 	    lblLengthDetail.setBounds(662, 181, 50, 16);
-	    frame.getContentPane().add(lblLengthDetail);
+        panel.add(lblLengthDetail);
 
 	    JLabel lblLengthDetail_1 = new JLabel("");
 	    lblLengthDetail_1.setBounds(710, 181, 65, 16);
-	    frame.getContentPane().add(lblLengthDetail_1);
+        panel.add(lblLengthDetail_1);
 
 	    JLabel lblGenreDetail = new JLabel("Genre(s): ");
 	    lblGenreDetail.setBounds(662, 210, 62, 16);
-	    frame.getContentPane().add(lblGenreDetail);
+        panel.add(lblGenreDetail);
 
 	    JLabel lblGenreDetail_1 = new JLabel("");
 	    lblGenreDetail_1.setBounds(725, 210, 578, 16);
-	    frame.getContentPane().add(lblGenreDetail_1);
+        panel.add(lblGenreDetail_1);
 
 	    JLabel lblNomRealisateur = new JLabel("R\u00E9alisateur: ");
 	    lblNomRealisateur.setBounds(660, 239, 73, 16);
-	    frame.getContentPane().add(lblNomRealisateur);
+        panel.add(lblNomRealisateur);
 
 	    JLabel lblNomRealisateur_1 = new JLabel("");
 	    lblNomRealisateur_1.setBounds(735, 239, 200, 16);
-	    frame.getContentPane().add(lblNomRealisateur_1);
+        panel.add(lblNomRealisateur_1);
 
 	    JLabel lblDescription = new JLabel("Description: ");
 	    lblDescription.setBounds(662, 267, 73, 16);
-	    frame.getContentPane().add(lblDescription);
+        panel.add(lblDescription);
 
 	    JLabel lblDescription_1 = new JLabel("");
 	    lblDescription_1.setBounds(745, 267, 585, 16);
-	    frame.getContentPane().add(lblDescription_1);
+        panel.add(lblDescription_1);
 
 	    JLabel lblTrailer = new JLabel("Bande-annonces: ");
 	    lblTrailer.setBounds(660, 296, 115, 16);
-	    frame.getContentPane().add(lblTrailer);
+        panel.add(lblTrailer);
 
 	    JLabel lblTrailer_1 = new JLabel("");
 	    lblTrailer_1.setBounds(773, 296, 569, 16);
-	    frame.getContentPane().add(lblTrailer_1);
+        panel.add(lblTrailer_1);
 
 	    JLabel lblScenariste = new JLabel("Scenariste(s): ");
 	    lblScenariste.setBounds(660, 320, 100, 16);
-	    frame.getContentPane().add(lblScenariste);
+        panel.add(lblScenariste);
 
 	    JLabel lblScenariste_1 = new JLabel("");
 	    lblScenariste_1.setBounds(745, 320, 585, 16);
-	    frame.getContentPane().add(lblScenariste_1);
+        panel.add(lblScenariste_1);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
