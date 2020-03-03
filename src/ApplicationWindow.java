@@ -174,19 +174,19 @@ public class ApplicationWindow {
 	    actorsTextField.setBounds(131, 364, 157, 22);
 	    frame.getContentPane().add(actorsTextField);
 	    
-	    JLabel lblTitleDetail = new JLabel("Titre");
+	    JLabel lblTitleDetail = new JLabel("Titre: ");
 	    lblTitleDetail.setBounds(662, 65, 247, 16);
 	    frame.getContentPane().add(lblTitleDetail);
 	    
-	    JLabel lblYearDetail = new JLabel("Ann\u00E9e");
+	    JLabel lblYearDetail = new JLabel("Ann\u00E9e: ");
 	    lblYearDetail.setBounds(662, 94, 209, 16);
 	    frame.getContentPane().add(lblYearDetail);
 	    
-	    JLabel ProdCountryLabelDetail = new JLabel("Pays production");
+	    JLabel ProdCountryLabelDetail = new JLabel("Pays production: ");
 	    ProdCountryLabelDetail.setBounds(660, 123, 332, 16);
 	    frame.getContentPane().add(ProdCountryLabelDetail);
 	    
-	    JLabel lblLangueDetail = new JLabel("Langue");
+	    JLabel lblLangueDetail = new JLabel("Langue: ");
 	    lblLangueDetail.setBounds(662, 152, 191, 16);
 	    frame.getContentPane().add(lblLangueDetail);
 		
@@ -226,9 +226,11 @@ public class ApplicationWindow {
 				
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
+					SearchItems items = facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
 					
-					SearchItems items = lblTitleDetail.setText(lblTitleDetail.getText() + items.getTitle());
+					lblTitleDetail.setText(lblTitleDetail.getText() + items.getTitle());
+					lblYearDetail.setText(lblYearDetail.getText() + items.getYear()[0]);
+					lblLangueDetail.setText(lblLangueDetail.getText() + items.getLang());
 				}
 			});
 	}

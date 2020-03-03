@@ -80,7 +80,29 @@ public class FacadeFilm  {
 		items.setTitle(rowContent.substring(0, rowContent.length()-6).trim());
 		items.setYear(new String[] {rowContent.substring(rowContent.length()-6).trim().substring(1,5)});
 		
-		return new SearchItems();
+		String selectQry = "SELECT * FROM film f "
+				+ "WHERE LOWER(titre) = :title AND anneeSortie = :year";
+		
+		Query query = session.createSQLQuery(selectQry).addEntity(Film.class);
+		query.setParameter("title", items.getTitle().toLowerCase());
+		query.setParameter("year", Integer.parseInt(items.getYear()[0]));
+		
+		
+		session.beginTransaction();
+
+		List<Film> films = query.list();
+		
+		session.getTransaction().commit();
+		
+		//Prepare data
+		String[] data = new String[films.size()];
+		if(films.size() > 0) {
+			Film film = films.get(0);
+			items.setLang(film.getLangueoriginale());
+		}
+		
+		
+		return items;
 	}
 	
 	private Query buildSearchQuery() {
