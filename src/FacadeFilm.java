@@ -83,61 +83,61 @@ public class FacadeFilm  {
 		
 		String selectQry = "SELECT * FROM film f "
 				+ "WHERE LOWER(titre) = :title AND anneeSortie = :year";
-		
+
 		Query query = session.createSQLQuery(selectQry).addEntity(Film.class);
 		query.setParameter("title", items.getTitle().toLowerCase());
 		query.setParameter("year", Integer.parseInt(items.getYear()[0]));
-		
+
 		session.beginTransaction();
 
 		List<Film> films = query.list();
-		
+
 		session.getTransaction().commit();
-		
+
 		//Prepare data
 		String[] data = new String[films.size()];
 		if(films.size() > 0) {
 			Film film = films.get(0);
 			items.setLang(film.getLangueoriginale());
-			
+
 			String pays = "";
 			List<Paysproduction> paysList =  this.convertSetToList(film.getPaysproductions());
-			
+
 			for(Paysproduction p : paysList) {
 				pays += p.getPays() + ", ";
 			}
 			items.setCountryProd(pays);
-			
+
 			items.setLength(film.getDuree().toString() + " min");
-			
+
 			String genre = "";
 			List<Genre> genreList =  this.convertSetToList(film.getGenres());
-			
+
 			for(Genre g : genreList) {
 				genre += g.getGenre() + ", ";
 			}
 			items.setGenre(genre);
-			
+
 			String trailers = "";
 			List<Bandeannonce> trailersList =  this.convertSetToList(film.getBandeannonces());
-			
+
 			for(Bandeannonce b : trailersList) {
 				trailers += b.getLien() + ", ";
 			}
 			items.setTrailers(trailers);
-			
+
 			String scenariste = "";
 			List<Scenariste> scenaristeList =  this.convertSetToList(film.getScenaristes());
-			
+
 			for(Scenariste s : scenaristeList) {
 				scenariste += s.getNom() + ", ";
 			}
 			items.setScenariste(scenariste);
-			
+
 			items.setRealisateur(film.getRealisateur().getPersonne().getNom());
 			items.setScenarioDescription(film.getResumescenario());
 		}
-		
+
 		return items;
 	}
 	
@@ -239,18 +239,27 @@ public class FacadeFilm  {
 		
 		return result + " WHERE ";
 	}
-	
+
 	//Source: https://www.geeksforgeeks.org/program-to-convert-set-to-list-in-java/
-	private <T> List<T> convertSetToList(Set<T> set) 
-    { 
-        // create an empty list 
-        List<T> list = new ArrayList<>(); 
-  
-        // push each element in the set into the list 
-        for (T t : set) 
-            list.add(t); 
-  
-        // return the list 
-        return list; 
-    } 
+	private <T> List<T> convertSetToList(Set<T> set)
+    {
+        // create an empty list
+        List<T> list = new ArrayList<>();
+
+        // push each element in the set into the list
+        for (T t : set)
+            list.add(t);
+
+        // return the list
+        return list;
+    }
+
+	public boolean connectClient(String email, String password) {
+		String query = "FROM Client WHERE LOWER(courriel) = :email AND motdepasse = :password";
+		Query q = session.createQuery(query);
+		q.setParameter("email", email.toLowerCase());
+		q.setParameter("password", password);
+		List<Client> client = q.list();//.get(0);
+		return client.size()>=1;
+	}
 }
