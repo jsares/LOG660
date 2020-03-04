@@ -76,7 +76,6 @@ public class ApplicationWindow extends JFrame{
 		table = new JTable(model);
 		model.addColumn("Titre (Annee)");
 
-		model.addRow(facade.getEmptyRow());
 		table.setBounds(28, 67, 381, 148);
 
 	    JScrollPane scroll = new JScrollPane(table);
@@ -274,18 +273,34 @@ public class ApplicationWindow extends JFrame{
 		 table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					SearchItems items = facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
-
-					lblTitleDetail_1.setText(items.getTitle());
-					lblYearDetail_1.setText(items.getYear()[0]);
-					ProdCountryLabelDetail_1.setText(items.getCountryProd());
-					lblLangueDetail_1.setText(items.getLang());
-					lblLengthDetail_1.setText(items.getLength());
-					lblGenreDetail_1.setText(items.getGenre());
-					lblNomRealisateur_1.setText(items.getRealisateur());
-					lblDescription_1.setText(items.getScenarioDescription());
-					lblTrailer_1.setText(items.getTrailers());
-					lblScenariste_1.setText(items.getScenariste());
+				    int selectedRow = table.getSelectedRow();
+				    if (selectedRow != -1) {
+                        SearchItems items = facade.handleRowClick(table.getValueAt(selectedRow, 0).toString());
+                        if (items != null) {
+                            lblTitleDetail_1.setText(items.getTitle());
+                            lblYearDetail_1.setText(items.getYear()[0]);
+                            ProdCountryLabelDetail_1.setText(items.getCountryProd());
+                            lblLangueDetail_1.setText(items.getLang());
+                            lblLengthDetail_1.setText(items.getLength());
+                            lblGenreDetail_1.setText(items.getGenre());
+                            lblNomRealisateur_1.setText(items.getRealisateur());
+                            lblDescription_1.setText(items.getScenarioDescription());
+                            lblTrailer_1.setText(items.getTrailers());
+                            lblScenariste_1.setText(items.getScenariste());
+                        }
+                        else {
+                            lblTitleDetail_1.setText("");
+                            lblYearDetail_1.setText("");
+                            ProdCountryLabelDetail_1.setText("");
+                            lblLangueDetail_1.setText("");
+                            lblLengthDetail_1.setText("");
+                            lblGenreDetail_1.setText("");
+                            lblNomRealisateur_1.setText("");
+                            lblDescription_1.setText("");
+                            lblTrailer_1.setText("");
+                            lblScenariste_1.setText("");
+                        }
+                    }
 				}
 			});
 		 return panel;
