@@ -34,6 +34,8 @@ import java.awt.Rectangle;
 public class FacadeFilm  {
 	private Session session = null;
 	private SearchItems searchItems = null;
+	public List<Film> films = null;
+	public Client leUser = null;
 
 	public FacadeFilm() {
 		session = HibernateUtil.getSessionFactory().openSession();
@@ -49,7 +51,7 @@ public class FacadeFilm  {
 		
 		session.beginTransaction();
 
-		List<Film> films = qry.list();
+		films = qry.list();
 		
 		session.getTransaction().commit();
 		
@@ -267,6 +269,9 @@ public class FacadeFilm  {
 		q.setParameter("email", email.toLowerCase());
 		q.setParameter("password", password);
 		List<Client> client = q.list();//.get(0);
+		if (client.size()>=1)
+			leUser = client.get(0);
+		
 		return client.size()>=1;
 	}
 
@@ -274,15 +279,16 @@ public class FacadeFilm  {
      * Fonction pour effectuer une location de film
      * Pour le plugguer au GUI, mettre idClient et idFilm en paramètre de la fonction et afficher les messages d'erreur du switch casedans le GUI
      */
-    public void locationFilm(){
+    public String locationFilm(int index){
         session.beginTransaction();
         //Devrons être en paramètres de la fct lors d'integration avec
-        int idClient=55666;
-        int idFilm=107688;
+        String message = "Location de '" + films.get(index).getTitre() + "' fait avec succes";
+        int idClient=leUser.getIdclient().intValue();///55666;
+        int idFilm=films.get(index).getIdfilm().intValue();//107688;
         try {
             Query q = session.createSQLQuery(" { call newlocation(?,?) }");
-            q.setInteger(1,idClient);  // first parameter, index starts with 0
-            q.setInteger(2,idFilm); // secon parameter
+            q.setInteger(0,idClient);  // first parameter, index starts with 0
+            q.setInteger(1,idFilm); // secon parameter
             q.executeUpdate();
         }catch(PersistenceException e) {
             if (e.getCause() != null && e.getCause().getCause() != null && e.getCause().getCause() instanceof SQLException) {
@@ -291,14 +297,17 @@ public class FacadeFilm  {
                     case 20001:
                         //Code pour afficher message à l'utilisateur
                         System.out.println("Vous devez avoir 18 ans et plus pour louer un film");
+                        message = "Vous devez avoir 18 ans et plus pour louer un film";
                         break;
                     case 20002:
                         //Code pour afficher message à l'utilisateur
                         System.out.println("Ce film n'est pas en inventaire");
+                        message = "Ce film n'est pas en inventaire";
                         break;
                     case 20003:
                         //Code pour afficher message à l'utilisateur
                         System.out.println("Vous avez atteint le nombre maximal de location pour votre forfait");
+                        message = "Vous avez atteint le nombre maximal de location pour votre forfait";
                         break;
                 }
             }
@@ -306,6 +315,7 @@ public class FacadeFilm  {
         session.getTransaction().commit();
         session.close();
         HibernateUtil.shutdown();
+        return message;
     }
     //Sert pu à rien mais on le garde au cas
     public void populerCopieFIlm(){
