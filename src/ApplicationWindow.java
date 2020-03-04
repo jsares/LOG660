@@ -5,6 +5,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ApplicationWindow extends JFrame{
     private final CardLayout cl = new CardLayout();
@@ -44,6 +46,12 @@ public class ApplicationWindow extends JFrame{
                     frame.pack();
                     frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
+                    frame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent e) {
+                            frame.facade.closeSession();
+                            System.exit(0);
+                        }});
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -218,30 +226,37 @@ public class ApplicationWindow extends JFrame{
 	    lblDescription.setBounds(662, 273, 73, 16);
         panel.add(lblDescription);
 
-	    JLabel lblTrailer = new JLabel("Bande-annonces: ");
-	    lblTrailer.setBounds(660, 349, 115, 16);
-        panel.add(lblTrailer);
-
-	    JLabel lblScenariste = new JLabel("Scenariste(s): ");
-	    lblScenariste.setBounds(662, 423, 100, 16);
-        panel.add(lblScenariste);
-
-	    JLabel lblScenariste_1 = new JLabel("");
-	    lblScenariste_1.setBounds(759, 423, 585, 16);
-        panel.add(lblScenariste_1);
-        
         JTextArea DescrioptionTextArea = new JTextArea();
         DescrioptionTextArea.setLineWrap(true);
         DescrioptionTextArea.setEditable(false);
         DescrioptionTextArea.setBounds(787, 270, 543, 63);
         panel.add(DescrioptionTextArea);
         
+
+	    JLabel lblTrailer = new JLabel("Bande-annonces: ");
+	    lblTrailer.setBounds(660, 349, 115, 16);
+        panel.add(lblTrailer);
+
         JTextArea trailerTextArea = new JTextArea();
         trailerTextArea.setLineWrap(true);
         trailerTextArea.setEditable(false);
         trailerTextArea.setBounds(787, 346, 543, 63);
         panel.add(trailerTextArea);
         
+	    JScrollPane trailerScroll = new JScrollPane(trailerTextArea);
+	    trailerScroll.setBounds(787, 346, 543, 63);
+	    panel.add(trailerScroll);
+        
+
+	    JLabel lblScenariste = new JLabel("Scenariste(s): ");
+	    lblScenariste.setBounds(662, 423, 100, 16);
+        panel.add(lblScenariste);
+
+	    JLabel lblScenariste_1 = new JLabel("");
+	    lblScenariste_1.setBounds(745, 423, 585, 16);
+        panel.add(lblScenariste_1);
+        
+
         JLabel LblActeurPersonnage = new JLabel("Personnage (Acteur):");
         LblActeurPersonnage.setBounds(660, 457, 124, 16);
         panel.add(LblActeurPersonnage);	    
@@ -284,19 +299,36 @@ public class ApplicationWindow extends JFrame{
 		 table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
-					SearchItems items = facade.handleRowClick(table.getValueAt(table.getSelectedRow(), 0).toString());
-					
-					lblTitleDetail_1.setText(items.getTitle());
-					lblYearDetail_1.setText(items.getYear()[0]);
-					ProdCountryLabelDetail_1.setText(items.getCountryProd());
-					lblLangueDetail_1.setText(items.getLang());
-					lblLengthDetail_1.setText(items.getLength());
-					lblGenreDetail_1.setText(items.getGenre());
-					lblNomRealisateur_1.setText(items.getRealisateur());
-					DescrioptionTextArea.setText(items.getScenarioDescription());
-					trailerTextArea.setText(items.getTrailers());
-					lblScenariste_1.setText(items.getScenariste());
-					personnageActeurTxtArea.setText(items.getActeur());
+				    int selectedRow = table.getSelectedRow();
+				    if (selectedRow != -1) {
+                        SearchItems items = facade.handleRowClick(table.getValueAt(selectedRow, 0).toString());
+                        if (items != null) {
+                            lblTitleDetail_1.setText(items.getTitle());
+                            lblYearDetail_1.setText(items.getYear()[0]);
+                            ProdCountryLabelDetail_1.setText(items.getCountryProd());
+                            lblLangueDetail_1.setText(items.getLang());
+                            lblLengthDetail_1.setText(items.getLength());
+                            lblGenreDetail_1.setText(items.getGenre());
+                            lblNomRealisateur_1.setText(items.getRealisateur());
+                            DescrioptionTextArea.setText(items.getScenarioDescription());
+                            trailerTextArea.setText(items.getTrailers());
+                            lblScenariste_1.setText(items.getScenariste());
+                            personnageActeurTxtArea.setText(items.getActeur());
+                        }
+                        else {
+                            lblTitleDetail_1.setText("");
+                            lblYearDetail_1.setText("");
+                            ProdCountryLabelDetail_1.setText("");
+                            lblLangueDetail_1.setText("");
+                            lblLengthDetail_1.setText("");
+                            lblGenreDetail_1.setText("");
+                            lblNomRealisateur_1.setText("");
+                            DescrioptionTextArea.setText("");
+                            trailerTextArea.setText("");
+                            lblScenariste_1.setText("");
+                            personnageActeurTxtArea.setText("");
+                        }
+                    }
 				}
 			});
 		 return panel;

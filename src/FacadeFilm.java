@@ -2,6 +2,7 @@
 
 import java.awt.EventQueue;
 
+import javax.persistence.PersistenceException;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -14,6 +15,8 @@ import org.hibernate.Session;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.math.BigInteger;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -68,7 +71,7 @@ public class FacadeFilm  {
 	}
 	
 	public String[] getNoDataFoundMessage() {
-		return new String[] {"Aucun film ne correspond � votre recherche."};
+		return new String[] {"Aucun film ne correspond � votre recherche."};
 	}
 	
 	public void closeSession() {
@@ -80,13 +83,17 @@ public class FacadeFilm  {
 		SearchItems items = new SearchItems();
 		items.setTitle(rowContent.substring(0, rowContent.length()-6).trim());
 		items.setYear(new String[] {rowContent.substring(rowContent.length()-6).trim().substring(1,5)});
-		
+
 		String selectQry = "SELECT * FROM film f "
 				+ "WHERE LOWER(titre) = :title AND anneeSortie = :year";
 
 		Query query = session.createSQLQuery(selectQry).addEntity(Film.class);
-		query.setParameter("title", items.getTitle().toLowerCase());
-		query.setParameter("year", Integer.parseInt(items.getYear()[0]));
+		try {
+            query.setParameter("title", items.getTitle().toLowerCase());
+            query.setParameter("year", Integer.parseInt(items.getYear()[0]));
+        } catch (NumberFormatException e) {
+		    return null;
+        }
 
 		session.beginTransaction();
 
@@ -270,4 +277,60 @@ public class FacadeFilm  {
 		List<Client> client = q.list();//.get(0);
 		return client.size()>=1;
 	}
+
+    /**
+     * Fonction pour effectuer une location de film
+     * Pour le plugguer au GUI, mettre idClient et idFilm en paramètre de la fonction et afficher les messages d'erreur du switch casedans le GUI
+     */
+    public void locationFilm(){
+        session.beginTransaction();
+        //Devrons être en paramètres de la fct lors d'integration avec
+        int idClient=55666;
+        int idFilm=107688;
+        try {
+            Query q = session.createSQLQuery(" { call newlocation(?,?) }");
+            q.setInteger(1,idClient);  // first parameter, index starts with 0
+            q.setInteger(2,idFilm); // secon parameter
+            q.executeUpdate();
+        }catch(PersistenceException e) {
+            if (e.getCause() != null && e.getCause().getCause() != null && e.getCause().getCause() instanceof SQLException) {
+                SQLException se = (SQLException) e.getCause().getCause();
+                switch (se.getErrorCode()) {
+                    case 20001:
+                        //Code pour afficher message à l'utilisateur
+                        System.out.println("Vous devez avoir 18 ans et plus pour louer un film");
+                        break;
+                    case 20002:
+                        //Code pour afficher message à l'utilisateur
+                        System.out.println("Ce film n'est pas en inventaire");
+                        break;
+                    case 20003:
+                        //Code pour afficher message à l'utilisateur
+                        System.out.println("Vous avez atteint le nombre maximal de location pour votre forfait");
+                        break;
+                }
+            }
+        }
+        session.getTransaction().commit();
+        session.close();
+        HibernateUtil.shutdown();
+    }
+    //Sert pu à rien mais on le garde au cas
+    public void populerCopieFIlm(){
+        session.beginTransaction();
+        String sqlClient = "SELECT * FROM Film";
+        List<Film> rows = session.createSQLQuery(sqlClient).addEntity(Film.class).list();
+        int nextVal;
+        for(int i=0;i<rows.size();i++){
+            Copiefilm copie=new Copiefilm(BigInteger.valueOf(i*10+1),rows.get(i),true);
+            session.save(copie);
+            copie=new Copiefilm(BigInteger.valueOf(i*10+2),rows.get(i),true);
+            session.save(copie);
+            copie=new Copiefilm(BigInteger.valueOf(i*10+3),rows.get(i),true);
+            session.save(copie);
+        }
+        session.getTransaction().commit();
+        session.close();
+        HibernateUtil.shutdown();
+    }
 }
