@@ -122,7 +122,7 @@ public class FacadeFilm  {
 			List<Bandeannonce> trailersList =  this.convertSetToList(film.getBandeannonces());
 
 			for(Bandeannonce b : trailersList) {
-				trailers += b.getLien() + ", ";
+				trailers += b.getLien() + "\n";
 			}
 			items.setTrailers(trailers);
 
@@ -136,6 +136,14 @@ public class FacadeFilm  {
 
 			items.setRealisateur(film.getRealisateur().getPersonne().getNom());
 			items.setScenarioDescription(film.getResumescenario());
+		
+			String personnage = "";
+			List<Personnage> personnageList =  this.convertSetToList(film.getPersonnages());
+
+			for(Personnage s : personnageList) {
+				personnage += s.getPersonnage() + " (" + s.getPersonne().getNom() + "), ";
+			}
+			items.setActeur(personnage);
 		}
 
 		return items;

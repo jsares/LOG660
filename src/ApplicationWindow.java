@@ -21,7 +21,7 @@ public class ApplicationWindow extends JFrame{
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
         contentPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
-        setPreferredSize(new Dimension(900, 550));
+        setPreferredSize(new Dimension(1500, 560));
 
         JComponent connectionCard = new ConnectionView(facade, cl, cards).$$$getRootComponent$$$();
         cards.add(connectionCard, "Page de connexion");
@@ -215,28 +215,46 @@ public class ApplicationWindow extends JFrame{
         panel.add(lblNomRealisateur_1);
 
 	    JLabel lblDescription = new JLabel("Description: ");
-	    lblDescription.setBounds(662, 267, 73, 16);
+	    lblDescription.setBounds(662, 273, 73, 16);
         panel.add(lblDescription);
 
-	    JLabel lblDescription_1 = new JLabel("");
-	    lblDescription_1.setBounds(745, 267, 585, 16);
-        panel.add(lblDescription_1);
-
 	    JLabel lblTrailer = new JLabel("Bande-annonces: ");
-	    lblTrailer.setBounds(660, 296, 115, 16);
+	    lblTrailer.setBounds(660, 349, 115, 16);
         panel.add(lblTrailer);
 
-	    JLabel lblTrailer_1 = new JLabel("");
-	    lblTrailer_1.setBounds(773, 296, 569, 16);
-        panel.add(lblTrailer_1);
-
 	    JLabel lblScenariste = new JLabel("Scenariste(s): ");
-	    lblScenariste.setBounds(660, 320, 100, 16);
+	    lblScenariste.setBounds(662, 423, 100, 16);
         panel.add(lblScenariste);
 
 	    JLabel lblScenariste_1 = new JLabel("");
-	    lblScenariste_1.setBounds(745, 320, 585, 16);
+	    lblScenariste_1.setBounds(759, 423, 585, 16);
         panel.add(lblScenariste_1);
+        
+        JTextArea DescrioptionTextArea = new JTextArea();
+        DescrioptionTextArea.setLineWrap(true);
+        DescrioptionTextArea.setEditable(false);
+        DescrioptionTextArea.setBounds(787, 270, 543, 63);
+        panel.add(DescrioptionTextArea);
+        
+        JTextArea trailerTextArea = new JTextArea();
+        trailerTextArea.setLineWrap(true);
+        trailerTextArea.setEditable(false);
+        trailerTextArea.setBounds(787, 346, 543, 63);
+        panel.add(trailerTextArea);
+        
+        JLabel LblActeurPersonnage = new JLabel("Personnage (Acteur):");
+        LblActeurPersonnage.setBounds(660, 457, 124, 16);
+        panel.add(LblActeurPersonnage);	    
+        
+        JTextArea personnageActeurTxtArea = new JTextArea();
+        personnageActeurTxtArea.setLineWrap(true);
+        personnageActeurTxtArea.setEditable(false);
+        personnageActeurTxtArea.setBounds(794, 454, 538, 63);
+        panel.add(personnageActeurTxtArea);
+        
+	    JScrollPane personneActeurScroll = new JScrollPane(personnageActeurTxtArea);
+	    personneActeurScroll.setBounds(794, 454, 538, 63);
+	    panel.add(personneActeurScroll);
 		
 		searchBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -275,9 +293,10 @@ public class ApplicationWindow extends JFrame{
 					lblLengthDetail_1.setText(items.getLength());
 					lblGenreDetail_1.setText(items.getGenre());
 					lblNomRealisateur_1.setText(items.getRealisateur());
-					lblDescription_1.setText(items.getScenarioDescription());
-					lblTrailer_1.setText(items.getTrailers());
+					DescrioptionTextArea.setText(items.getScenarioDescription());
+					trailerTextArea.setText(items.getTrailers());
 					lblScenariste_1.setText(items.getScenariste());
+					personnageActeurTxtArea.setText(items.getActeur());
 				}
 			});
 		 return panel;
